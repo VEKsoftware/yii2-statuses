@@ -9,6 +9,7 @@ use yii\grid\GridView;
 
 $this->title = Yii::t('statuses', 'View Statuses Links') . ' ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('statuses', 'Statuses'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -18,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('statuses', 'Create Statuses Link'), ['link-create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('statuses', 'Create Statuses Link'), ['link-create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

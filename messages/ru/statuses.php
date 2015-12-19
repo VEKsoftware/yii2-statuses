@@ -8,6 +8,7 @@ return [
     
     'Create' => 'Создать',
     'Update' => 'Редактировать',
+    'Refresh' => 'Обновить',
     'Delete' => 'Удалить',
     
     'Are you sure you want to delete this item?' => 'Вы уверены, что хотите удалить это?',
@@ -16,6 +17,7 @@ return [
     'Update Statuses' => 'Редактирование статуса',
     
     'View Statuses Links' => 'Список связей статуса',
+    'Update Statuses Links' => 'Редактировать связи статуса',
     'Create Statuses Link' => 'Создать новую связь',
     
     'Statuses' => 'Статусы',
@@ -29,5 +31,5 @@ return [
     'Statuses Links Status From' => 'Исходный статус',
     'Statuses Links Status To' => 'Целевой статус',
     'Statuses Links Right' => 'Право на изменение',
-    'Statuses Links Status Right ID' => 'ID права',
+    'Statuses Links Right ID' => 'Право на изменение',
 ];

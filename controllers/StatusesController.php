@@ -127,7 +127,12 @@ class StatusesController extends Controller
      */
     public function actionLinkCreate($id)
     {
+        //die( var_dump(Yii::$app->request->queryParams) );
+        
         $model = $this->findModel($id);
+        
+        $modelLink = new StatusesLinks();
+        $modelLink->status_from = $model->id;
         
         $searchModel = new StatusesSearch();
         $dataProviderModel = $searchModel->searchUnlink( $model, Yii::$app->request->queryParams );
@@ -138,6 +143,7 @@ class StatusesController extends Controller
         return $this->render(
             'link-create', [
             'model' => $model,
+            'modelLink' => $modelLink,
             
             'searchModel' => $searchModel,
             'dataProviderModel' => $dataProviderModel,

@@ -34,6 +34,7 @@ class StatusesLinks extends \statuses\components\CommonRecord
     public function rules()
     {
         return [
+            [['status_from', 'status_to', 'right_id'], 'required'],
             [['status_from', 'status_to', 'right_id'], 'integer'],
             [['right'], 'safe'],
         ];
