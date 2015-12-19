@@ -1,5 +1,5 @@
 <?php
-namespace wallets\components;
+namespace statuses\components;
 
 use Yii;
 use yii\db\ActiveRecord;
