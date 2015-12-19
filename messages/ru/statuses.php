@@ -19,4 +19,7 @@ return [
     'Statuses Doc Type' => 'Тип документа',
     'Statuses Name' => 'Наименование статуса',
     'Statuses Description' => 'Описание статуса',
+    
+    'Statuses Users' => 'Пользователи',
+    'Statuses Payments' => 'Платежи',
 ];

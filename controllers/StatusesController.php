@@ -89,6 +89,29 @@ class StatusesController extends Controller
             ]);
         }
     }
+    
+    /**
+     * Create links to other units of Statuses model
+     * 
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionLink($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            
+            return $this->redirect(['link', 'id' => $model->id]);
+            
+        } else {
+            
+            return $this->render(
+                'link', [
+                'model' => $model,
+            ]);
+        }
+    }
 
     /**
      * Deletes an existing Statuses model.

@@ -62,8 +62,8 @@ class Statuses extends \statuses\components\CommonRecord
      */
     public function docTypeLabels() {
         return [
-            self::DT_USERS => 'Пользователи',
-            self::DT_PAYMENTS => 'Платежи',
+            self::DT_USERS => Yii::t('statuses', 'Statuses Users'),
+            self::DT_PAYMENTS => Yii::t('statuses', 'Statuses Payments'),
         ];
     }
     
