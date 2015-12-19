@@ -1,0 +1,22 @@
+{
+    "name": "veksoftware/yii2-statuses",
+    "description": "",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","status"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergey Okatov",
+            "email": "sokatov@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "veksoftware/yii2-partner-user": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "statuses\\": ""
+        }
+    }
+}
