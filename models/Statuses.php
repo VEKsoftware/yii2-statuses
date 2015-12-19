@@ -49,9 +49,9 @@ class Statuses extends \statuses\components\CommonRecord
     {
         return [
             'id' => Yii::t('statuses', 'ID'),
-            'doc_type' => Yii::t('statuses', 'Doc Type'),
-            'name' => Yii::t('statuses', 'Name'),
-            'description' => Yii::t('statuses', 'Description'),
+            'doc_type' => Yii::t('statuses', 'Statuses Doc Type'),
+            'name' => Yii::t('statuses', 'Statuses Name'),
+            'description' => Yii::t('statuses', 'Statuses Description'),
         ];
     }
     
@@ -60,7 +60,7 @@ class Statuses extends \statuses\components\CommonRecord
      * 
      * @return array
      */
-    public function docTypesLabels() {
+    public function docTypeLabels() {
         return [
             self::DT_USERS => 'Пользователи',
             self::DT_PAYMENTS => 'Платежи',

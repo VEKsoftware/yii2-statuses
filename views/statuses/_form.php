@@ -12,14 +12,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'doc_type')->textInput() ?>
+    <?php echo $form->field($model, 'doc_type')->dropDownList( $model->docTypeLabels() ); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?php echo $form->field($model, 'name')->textInput(['maxlength' => true]); ?>
 
-    <?= $form->field($model, 'description')->textInput() ?>
+    <?php echo $form->field($model, 'description')->textarea(); ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('statuses', 'Create') : Yii::t('statuses', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php echo Html::submitButton($model->isNewRecord ? Yii::t('statuses', 'Create') : Yii::t('statuses', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
     </div>
 
     <?php ActiveForm::end(); ?>
