@@ -66,6 +66,18 @@ class Statuses extends \statuses\components\CommonRecord
             self::DT_PAYMENTS => 'Платежи',
         ];
     }
+    
+    /**
+     * @return string (doc_type label) || integer (doc_type) || null
+     */
+    public function getDocTypeName() {
+        
+        $list = $this->docTypeLabels();
+        
+        if( !empty($list) && isset($list[$this->doc_type]) ) return $list[$this->doc_type];
+        return $this->doc_type;
+        
+    }
 
     /**
      * @return \yii\db\ActiveQuery

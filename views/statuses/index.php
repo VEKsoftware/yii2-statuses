@@ -24,9 +24,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'doc_type',
+            [
+                'attribute' => 'doc_type',
+                'filter' => $searchModel->docTypeLabels(),
+                'value' => function( $model, $key ) {
+                    
+                    return $model->docTypeName;
+                    
+                },
+            ],
             'name',
             'description',
 
