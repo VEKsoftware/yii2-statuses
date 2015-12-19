@@ -48,21 +48,38 @@ class StatusesSearch extends Statuses
         ]);
 
         $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
+        if ( !$this->validate() ) return $dataProvider;
 
         $query->andFilterWhere([
             'id' => $this->id,
             'doc_type' => $this->doc_type,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description]);
-
+        $query->andFilterWhere(['like', 'name', $this->name]);
         return $dataProvider;
+    }
+    
+    /**
+     * 
+     */
+    public function searchUnlink( $model, $params ) {
+        
+        $query = Statuses::find()
+            ->where([
+                'and',
+                [ 'not', ['id' => $model->id] ],
+                [ 'doc_type' => $model->doc_type ],
+            ]);
+        
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+        if ( !$this->validate() ) return $dataProvider;
+        
+        $query->andFilterWhere(['like', 'name', $this->name]);
+        return $dataProvider;
+        
     }
 }

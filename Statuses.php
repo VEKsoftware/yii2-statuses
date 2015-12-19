@@ -11,7 +11,6 @@ namespace statuses;
  */
 class Statuses extends \yii\base\Module
 {
-
     /**
      * @inherit
      */

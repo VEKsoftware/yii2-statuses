@@ -15,6 +15,9 @@ return [
     'Create Statuses' => 'Создать статус',
     'Update Statuses' => 'Редактирование статуса',
     
+    'View Statuses Links' => 'Список связей статуса',
+    'Create Statuses Link' => 'Создать новую связь',
+    
     'Statuses' => 'Статусы',
     'Statuses Doc Type' => 'Тип документа',
     'Statuses Name' => 'Наименование статуса',
@@ -22,4 +25,9 @@ return [
     
     'Statuses Users' => 'Пользователи',
     'Statuses Payments' => 'Платежи',
+    
+    'Statuses Links Status From' => 'Исходный статус',
+    'Statuses Links Status To' => 'Целевой статус',
+    'Statuses Links Right' => 'Право на изменение',
+    'Statuses Links Status Right ID' => 'ID права',
 ];

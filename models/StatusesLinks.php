@@ -4,6 +4,8 @@ namespace statuses\models;
 
 use Yii;
 
+use partneruser\models\RefRights;
+
 /**
  * This is the model class for table "statuses_links".
  *
@@ -17,6 +19,7 @@ use Yii;
  */
 class StatusesLinks extends \statuses\components\CommonRecord
 {
+    
     /**
      * @inheritdoc
      */
@@ -31,7 +34,8 @@ class StatusesLinks extends \statuses\components\CommonRecord
     public function rules()
     {
         return [
-            [['status_from', 'status_to', 'right_id'], 'integer']
+            [['status_from', 'status_to', 'right_id'], 'integer'],
+            [['right'], 'safe'],
         ];
     }
 
@@ -41,9 +45,11 @@ class StatusesLinks extends \statuses\components\CommonRecord
     public function attributeLabels()
     {
         return [
-            'status_from' => Yii::t('statuses', 'Status From'),
-            'status_to' => Yii::t('statuses', 'Status To'),
-            'right_id' => Yii::t('statuses', 'Right ID'),
+            'status_from' => Yii::t('statuses', 'Statuses Links Status From'),
+            'status_to' => Yii::t('statuses', 'Statuses Links Status To'),
+            'right_id' => Yii::t('statuses', 'Statuses Links Right ID'),
+            
+            'right' => Yii::t('statuses', 'Statuses Links Right'),
         ];
     }
 

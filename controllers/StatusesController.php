@@ -3,11 +3,19 @@
 namespace statuses\controllers;
 
 use Yii;
-use statuses\models\Statuses;
-use statuses\models\StatusesSearch;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
+use statuses\models\Statuses;
+use statuses\models\StatusesSearch;
+
+use statuses\models\StatusesLinks;
+use statuses\models\StatusesLinksSearch;
+
+use partneruser\models\RefRights;
+use partneruser\models\RefRightsSearch;
 
 /**
  * StatusesController implements the CRUD actions for Statuses model.
@@ -91,26 +99,52 @@ class StatusesController extends Controller
     }
     
     /**
+     * List links to other units of Statuses model
+     * 
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionLinkView($id)
+    {
+        $model = $this->findModel($id);
+        
+        $searchModel = new StatusesLinksSearch();
+        $dataProvider = $searchModel->search( $id, Yii::$app->request->queryParams );
+        
+        return $this->render(
+            'link-view', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    /**
      * Create links to other units of Statuses model
      * 
      * @param integer $id
      * @return mixed
      */
-    public function actionLink($id)
+    public function actionLinkCreate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        
+        $searchModel = new StatusesSearch();
+        $dataProviderModel = $searchModel->searchUnlink( $model, Yii::$app->request->queryParams );
+        
+        $rightsSearchModel = new RefRightsSearch();
+        $rightsDataProvider = $rightsSearchModel->search( Yii::$app->request->queryParams );
+        
+        return $this->render(
+            'link-create', [
+            'model' => $model,
             
-            return $this->redirect(['link', 'id' => $model->id]);
+            'searchModel' => $searchModel,
+            'dataProviderModel' => $dataProviderModel,
             
-        } else {
-            
-            return $this->render(
-                'link', [
-                'model' => $model,
-            ]);
-        }
+            'rightsSearchModel' => $rightsSearchModel,
+            'rightsDataProvider' => $rightsDataProvider,
+        ]);
     }
 
     /**
