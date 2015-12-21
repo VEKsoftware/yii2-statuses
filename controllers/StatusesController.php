@@ -129,7 +129,7 @@ class StatusesController extends Controller
             
             if( $modelLink->load( $post ) && $modelLink->save() ) {
                 
-                return $this->redirect(['link-view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->id]);
                 
             } 
             

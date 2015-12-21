@@ -4,6 +4,8 @@ namespace statuses\models;
 
 use Yii;
 
+use statuses\models\StatusesLinks;
+
 /**
  * This is the model class for table "statuses".
  *
@@ -107,4 +109,5 @@ class Statuses extends \statuses\components\CommonRecord
         */
         parent::afterSave($insert,$attr);
     }
+
 }
