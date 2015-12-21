@@ -29,6 +29,7 @@ class StatusesController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'link-delete' => ['post'],
                 ],
             ],
         ];
@@ -127,12 +128,21 @@ class StatusesController extends Controller
      */
     public function actionLinkCreate($id)
     {
-        //die( var_dump(Yii::$app->request->queryParams) );
-        
         $model = $this->findModel($id);
         
         $modelLink = new StatusesLinks();
         $modelLink->status_from = $model->id;
+        
+        $post = Yii::$app->request->post();
+        if( !empty($post) ) {
+            
+            if( $modelLink->load( $post ) && $modelLink->save() ) {
+                
+                return $this->redirect(['link-view', 'id' => $model->id]);
+                
+            } 
+            
+        }
         
         $searchModel = new StatusesSearch();
         $dataProviderModel = $searchModel->searchUnlink( $model, Yii::$app->request->queryParams );
@@ -151,6 +161,23 @@ class StatusesController extends Controller
             'rightsSearchModel' => $rightsSearchModel,
             'rightsDataProvider' => $rightsDataProvider,
         ]);
+    }
+    
+    /**
+     * Delete links to other units of Statuses model
+     * 
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionLinkDelete( $status_from, $status_to, $right_id ) {
+        
+        $model = $this->findModel( $status_from );
+        $modelLink = $this->findModelLink( $status_from, $status_to, $right_id );
+        
+        $modelLink->delete();
+        
+        return $this->redirect(['link-view', 'id' => $status_to]);
+        
     }
 
     /**
@@ -176,9 +203,37 @@ class StatusesController extends Controller
     protected function findModel($id)
     {
         if (($model = Statuses::findOne($id)) !== null) {
+            
             return $model;
+            
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            
+            throw new NotFoundHttpException( Yii::t('statuses', 'The requested page does not exist.') );
+            
+        }
+    }
+    
+    /**
+     * Finds the StatusesLinks model based on keys 'status_from', 'status_to' and 'right_id'.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return StatusesLinks the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModelLink( $status_from, $status_to, $right_id )
+    {
+        $model = StatusesLinks::find()
+            ->where(['status_from' => $status_from, 'status_to' => $status_to, 'right_id' => $right_id])
+            ->one();
+        
+        if ($model !== null) {
+            
+            return $model;
+            
+        } else {
+            
+            throw new NotFoundHttpException( Yii::t('statuses', 'The requested page does not exist.') );
+            
         }
     }
 }

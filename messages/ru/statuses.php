@@ -6,6 +6,8 @@
 return [
     //'Source' => 'Перевод',
     
+    'The requested page does not exist.' => 'Страница не существует.',
+    
     'Create' => 'Создать',
     'Update' => 'Редактировать',
     'Refresh' => 'Обновить',
@@ -30,6 +32,8 @@ return [
     
     'Statuses Links Status From' => 'Исходный статус',
     'Statuses Links Status To' => 'Целевой статус',
-    'Statuses Links Right' => 'Право на изменение',
-    'Statuses Links Right ID' => 'Право на изменение',
+    'Statuses Links Right' => 'Права доступа',
+    'Statuses Links Right ID' => 'Права доступа',
+    
+    'Statuses Links is exists.' => 'Такая связь уже существует.',
 ];

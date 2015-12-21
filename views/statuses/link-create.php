@@ -38,6 +38,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ])->textInput(['style' => 'display: none;']); ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-10">
+            <?php echo $form->field($modelLink, 'status_from', [
+                'labelOptions' => [ 'style' => 'font-size: 0%; display: none;' ]
+            ])->textInput(['style' => 'display: none;', 'readonly' => true]); ?>
+        </div>
+    </div>
     
     <?php ActiveForm::end(); ?>
 

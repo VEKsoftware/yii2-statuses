@@ -36,8 +36,28 @@ class StatusesLinks extends \statuses\components\CommonRecord
         return [
             [['status_from', 'status_to', 'right_id'], 'required'],
             [['status_from', 'status_to', 'right_id'], 'integer'],
+            
+            [['status_from', 'status_to', 'right_id'], 'validateExists'],
+            
             [['right'], 'safe'],
         ];
+    }
+    
+    /**
+     * check DB for unique link (exists or not)
+     */
+    public function validateExists() {
+        
+        $link = StatusesLinks::find()
+            ->where([
+                'status_from' => $this->status_from,
+                'status_to' => $this->status_to,
+                'right_id' => $this->right_id,
+            ])
+            ->one();
+        
+        if( !is_null( $link ) ) $this->addError('status_from', Yii::t('statuses', 'Statuses Links is exists.') );
+        
     }
 
     /**

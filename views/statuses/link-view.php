@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -32,10 +34,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status_to',
             ],
             [
-                'attribute' => 'right',
+                'attribute' => 'right_id',
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'view' => function( $url, $model, $key ) { return null; },
+                    'update' => function( $url, $model, $key ) { return null; },
+                    'delete' => function( $url, $model, $key ) {
+                        return Html::a( Yii::t('statuses', 'Delete'), $url);
+                    }
+                ],
+                'urlCreator' => function($action, $model, $key, $index) {
+                    return Url::toRoute(['statuses/statuses/link-delete',
+                        'status_from' => $model->status_from,
+                        'status_to' => $model->status_to,
+                        'right_id' => $model->right_id,
+                    ]);
+                },
+            ],
         ],
     ]); ?>
 
