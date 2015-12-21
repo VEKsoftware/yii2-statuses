@@ -57,8 +57,16 @@ class StatusesController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model = $this->findModel($id);
+        
+        $searchModel = new StatusesLinksSearch();
+        $dataProvider = $searchModel->search( $id, Yii::$app->request->queryParams );
+        
+        return $this->render(
+            'view', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -91,33 +99,16 @@ class StatusesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            
             return $this->redirect(['view', 'id' => $model->id]);
+            
         } else {
+            
             return $this->render('update', [
                 'model' => $model,
             ]);
+            
         }
-    }
-    
-    /**
-     * List links to other units of Statuses model
-     * 
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionLinkView($id)
-    {
-        $model = $this->findModel($id);
-        
-        $searchModel = new StatusesLinksSearch();
-        $dataProvider = $searchModel->search( $id, Yii::$app->request->queryParams );
-        
-        return $this->render(
-            'link-view', [
-            'model' => $model,
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
     }
     
     /**
@@ -174,9 +165,13 @@ class StatusesController extends Controller
         $model = $this->findModel( $status_from );
         $modelLink = $this->findModelLink( $status_from, $status_to, $right_id );
         
-        $modelLink->delete();
+        $modelLink->deleteAll(
+            'status_from = '.$modelLink->status_from.' AND '.
+            'status_to = '.$modelLink->status_to.' AND '.
+            'right_id = '.$modelLink->right_id
+        );
         
-        return $this->redirect(['link-view', 'id' => $status_to]);
+        return $this->redirect(['view', 'id' => $status_from]);
         
     }
 

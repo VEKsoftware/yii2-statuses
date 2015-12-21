@@ -11,7 +11,7 @@ use yii\grid\GridView;
 $this->title = Yii::t('statuses', 'Create Statuses Link') . ' ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('statuses', 'Statuses'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('statuses', 'View Statuses Links'), 'url' => ['link-view', 'id' => $model->id]];
+//$this->params['breadcrumbs'][] = ['label' => Yii::t('statuses', 'View Statuses Links'), 'url' => ['link-view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

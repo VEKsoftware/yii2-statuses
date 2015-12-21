@@ -19,7 +19,6 @@ use partneruser\models\RefRights;
  */
 class StatusesLinks extends \statuses\components\CommonRecord
 {
-    
     /**
      * @inheritdoc
      */
@@ -44,6 +43,13 @@ class StatusesLinks extends \statuses\components\CommonRecord
     }
     
     /**
+     * list of primary keys for model identification
+     */
+    public static function primaryKey() {
+        return [ 'status_from', 'status_to', 'right_id' ];
+    }
+    
+    /**
      * check DB for unique link (exists or not)
      */
     public function validateExists() {
@@ -59,6 +65,20 @@ class StatusesLinks extends \statuses\components\CommonRecord
         if( !is_null( $link ) ) $this->addError('status_from', Yii::t('statuses', 'Statuses Links is exists.') );
         
     }
+    
+    /**
+     * @inheritdoc
+     */
+    public function getStatusName() {
+        return $this->statusTo->name;
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function getRightName() {
+        return $this->right->name;
+    }
 
     /**
      * @inheritdoc
@@ -69,6 +89,9 @@ class StatusesLinks extends \statuses\components\CommonRecord
             'status_from' => Yii::t('statuses', 'Statuses Links Status From'),
             'status_to' => Yii::t('statuses', 'Statuses Links Status To'),
             'right_id' => Yii::t('statuses', 'Statuses Links Right ID'),
+            
+            'statusName' => Yii::t('statuses', 'Statuses Links Status To'),
+            'rightName' => Yii::t('statuses', 'Statuses Links Right ID'),
             
             'right' => Yii::t('statuses', 'Statuses Links Right'),
         ];

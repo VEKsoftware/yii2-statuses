@@ -1,7 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model statuses\models\Statuses */
@@ -16,7 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('statuses', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('statuses', 'Update Statuses Links'), ['link-view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('statuses', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -38,5 +40,52 @@ $this->params['breadcrumbs'][] = $this->title;
             'description',
         ],
     ]) ?>
+
+</div>
+<div class="statuses-index">
+
+    <h3><?= Html::encode( Yii::t('statuses', 'Statuses Links') ) ?></h3>
+
+    <p>
+        <?= Html::a(Yii::t('statuses', 'Create Statuses Link'), ['link-create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            
+            [
+                'attribute' => 'statusName',
+            ],
+            [
+                'attribute' => 'rightName',
+            ],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'view' => function( $url, $model, $key ) { return null; },
+                    'update' => function( $url, $model, $key ) { return null; },
+                    'delete' => function( $url, $model, $key ) {
+                        return Html::a( Yii::t('statuses', 'Delete'), $url, [
+                            'data' => [
+                                'confirm' => Yii::t('statuses', 'Are you sure you want to delete this item?'),
+                                'method' => 'post',
+                            ]
+                        ]);
+                    }
+                ],
+                'urlCreator' => function($action, $model, $key, $index) {
+                    return Url::toRoute(['statuses/link-delete',
+                        'status_from' => $model->status_from,
+                        'status_to' => $model->status_to,
+                        'right_id' => $model->right_id,
+                    ]);
+                },
+            ],
+        ],
+    ]); ?>
 
 </div>

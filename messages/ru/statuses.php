@@ -30,6 +30,8 @@ return [
     'Statuses Users' => 'Пользователи',
     'Statuses Payments' => 'Платежи',
     
+    'Statuses Links' => 'Связи с другими статусами',
+    
     'Statuses Links Status From' => 'Исходный статус',
     'Statuses Links Status To' => 'Целевой статус',
     'Statuses Links Right' => 'Права доступа',
