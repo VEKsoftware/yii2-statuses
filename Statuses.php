@@ -2,6 +2,8 @@
 
 namespace statuses;
 
+use yii\base\ErrorException;
+
 /**
  *
  * Main class for Statuses module.
@@ -47,7 +49,10 @@ class Statuses extends \yii\base\Module
     public function init()
     {
         parent::init();
-
+        
+        $this->checkAccessClassConfig();
+        $this->checkAccessRightsClassConfig();
+        
         $this->registerTranslations();
     }
 
@@ -66,6 +71,28 @@ class Statuses extends \yii\base\Module
             ],
 
         ];
+    }
+    
+    /**
+     * 
+     */
+    public function checkAccessClassConfig() {
+        
+        $reflectionClass = new \ReflectionClass( $this->accessClass );
+        
+        if( $reflectionClass->implementsInterface('\statuses\StatusesAccessInterface') == false ) {
+            throw new ErrorException('Statuses::accessClass must implement StatusesAccessInterface.');
+        }
+        
+    }
+    
+    /**
+     * 
+     */
+    public function checkAccessRightsClassConfig() {
+        
+        return true;
+        
     }
 
 }
