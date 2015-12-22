@@ -12,7 +12,6 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "veksoftware/yii2-partner-user": "dev-master"
     },
     "autoload": {
         "psr-4": {
