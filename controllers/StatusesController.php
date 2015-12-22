@@ -6,7 +6,10 @@ use Yii;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
+
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 use statuses\models\Statuses;
 use statuses\models\StatusesSearch;
@@ -32,6 +35,17 @@ class StatusesController extends Controller
                     'link-delete' => ['post'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // everything else is denied
+                ],
+            ],
         ];
     }
 
@@ -42,6 +56,11 @@ class StatusesController extends Controller
     public function actionIndex()
     {
         $searchModel = new StatusesSearch();
+        
+        if(! $searchModel->isAllowed('statuses.statuses.index')) {
+            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+        }
+        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -58,6 +77,10 @@ class StatusesController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
+        
+        if(! $model->isAllowed('statuses.statuses.view')) {
+            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+        }
         
         $searchModel = new StatusesLinksSearch();
         $dataProvider = $searchModel->search( $id, Yii::$app->request->queryParams );
@@ -79,6 +102,10 @@ class StatusesController extends Controller
     {
         $model = new Statuses();
 
+        if(! $model->isAllowed('statuses.statuses.create')) {
+            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -97,6 +124,10 @@ class StatusesController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        if(! $model->isAllowed('statuses.statuses.update')) {
+            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             
@@ -120,6 +151,10 @@ class StatusesController extends Controller
     public function actionLinkCreate($id)
     {
         $model = $this->findModel($id);
+        
+        if(! $model->isAllowed('statuses.statuses.create.link')) {
+            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+        }
         
         $modelLink = new StatusesLinks();
         $modelLink->status_from = $model->id;
@@ -163,6 +198,11 @@ class StatusesController extends Controller
     public function actionLinkDelete( $status_from, $status_to, $right_id ) {
         
         $model = $this->findModel( $status_from );
+        
+        if(! $model->isAllowed('statuses.statuses.delete.link')) {
+            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+        }
+        
         $modelLink = $this->findModelLink( $status_from, $status_to, $right_id );
         
         $modelLink->deleteAll(
@@ -183,7 +223,13 @@ class StatusesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        
+        if(! $model->isAllowed('statuses.statuses.delete')) {
+            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+        }
+        
+        $model->delete();
 
         return $this->redirect(['index']);
     }

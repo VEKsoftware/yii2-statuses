@@ -25,7 +25,17 @@ class Statuses extends \yii\base\Module
      * Database component to use in the module
      */
     public $db;
-
+    
+    /**
+     * Class for access methods, implements StatusesAccessInterface
+     */
+    public $accessClass;
+    
+    /**
+     * Class for access rights from DB
+     */
+    public $accessRightsClass;
+    
     /**
      * @inherit
      */

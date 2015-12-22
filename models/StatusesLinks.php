@@ -4,8 +4,6 @@ namespace statuses\models;
 
 use Yii;
 
-use partneruser\models\RefRights;
-
 /**
  * This is the model class for table "statuses_links".
  *
@@ -24,7 +22,7 @@ class StatusesLinks extends \statuses\components\CommonRecord
      */
     public static function tableName()
     {
-        return 'statuses_links';
+        return '{{%statuses_links}}';
     }
 
     /**
@@ -65,20 +63,6 @@ class StatusesLinks extends \statuses\components\CommonRecord
         if( !is_null( $link ) ) $this->addError('status_from', Yii::t('statuses', 'Statuses Links is exists.') );
         
     }
-    
-    /**
-     * @inheritdoc
-     */
-    public function getStatusName() {
-        return $this->statusTo->name;
-    }
-    
-    /**
-     * @inheritdoc
-     */
-    public function getRightName() {
-        return $this->right->name;
-    }
 
     /**
      * @inheritdoc
@@ -96,13 +80,26 @@ class StatusesLinks extends \statuses\components\CommonRecord
             'right' => Yii::t('statuses', 'Statuses Links Right'),
         ];
     }
+    
+    /**
+     * @inherit
+     */
+    public function behaviors()
+    {
+        return [
+            'access'=>[
+                'class'=> \statuses\Statuses::getInstance()->accessClass,
+            ],
+        ];
+    }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getRight()
     {
-        return $this->hasOne(RefRights::className(), ['id' => 'right_id']);
+        $class = \statuses\Statuses::getInstance()->accessRightsClass;
+        return $this->hasOne( $class::className(), ['id' => 'right_id']);
     }
 
     /**
@@ -119,5 +116,19 @@ class StatusesLinks extends \statuses\components\CommonRecord
     public function getStatusTo()
     {
         return $this->hasOne(Statuses::className(), ['id' => 'status_to']);
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function getStatusName() {
+        return $this->statusTo->name;
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function getRightName() {
+        return $this->right->name;
     }
 }

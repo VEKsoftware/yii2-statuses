@@ -13,7 +13,7 @@ class CommonRecord extends ActiveRecord
 //        return Yii::$app->db_common;
         $instance = Statuses::getInstance();
         if($instance === NULL) {
-            throw new ErrorException('You should use this class through yii2-wallets module.');
+            throw new ErrorException('You should use this class through yii2-status module.');
         } elseif(!$instance->db) {
             $db = 'db';
         } else {
