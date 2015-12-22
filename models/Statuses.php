@@ -58,6 +58,19 @@ class Statuses extends \statuses\components\CommonRecord
     }
     
     /**
+     * @inherit
+     */
+    public function behaviors()
+    {
+        return [
+            'access'=>[
+                'class'=>\statuses\Statuses::getInstance()->accessClass,
+//                'relation'=>[$this,'getUserRelationName'],
+            ],
+        ];
+    }
+    
+    /**
      * Doc types labels
      * 
      * @return array
