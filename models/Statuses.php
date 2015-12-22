@@ -19,10 +19,6 @@ use statuses\models\StatusesLinks;
  */
 class Statuses extends \statuses\components\CommonRecord
 {
-    // List of doc types
-    const DT_USERS = 1;
-    const DT_PAYMENTS = 2;
-    
     /**
      * @inheritdoc
      */
@@ -76,10 +72,9 @@ class Statuses extends \statuses\components\CommonRecord
      * @return array
      */
     public function docTypeLabels() {
-        return [
-            self::DT_USERS => Yii::t('statuses', 'Statuses Users'),
-            self::DT_PAYMENTS => Yii::t('statuses', 'Statuses Payments'),
-        ];
+        
+        return \statuses\Statuses::getInstance()->docTypes;
+        
     }
     
     /**
