@@ -5,6 +5,7 @@ namespace statuses\models;
 use Yii;
 
 use statuses\models\StatusesLinks;
+use statuses\models\StatusesDoctypes;
 
 /**
  * This is the model class for table "statuses".
@@ -24,7 +25,7 @@ class Statuses extends \statuses\components\CommonRecord
      */
     public static function tableName()
     {
-        return 'statuses';
+        return '{{%statuses}}';
     }
 
     /**
@@ -87,6 +88,14 @@ class Statuses extends \statuses\components\CommonRecord
         if( !empty($list) && isset($list[$this->doc_type]) ) return $list[$this->doc_type];
         return $this->doc_type;
         
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDocType()
+    {
+        return $this->hasOne( StatusesDoctypes::className(), ['id' => 'doc_type']);
     }
 
     /**

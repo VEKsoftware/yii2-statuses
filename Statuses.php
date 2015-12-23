@@ -76,7 +76,7 @@ class Statuses extends \yii\base\Module
     /**
      * 
      */
-    public function checkAccessClassConfig() {
+    protected function checkAccessClassConfig() {
         
         $reflectionClass = new \ReflectionClass( $this->accessClass );
         
@@ -89,7 +89,7 @@ class Statuses extends \yii\base\Module
     /**
      * 
      */
-    public function checkAccessRightsClassConfig() {
+    protected function checkAccessRightsClassConfig() {
         
         return true;
         
