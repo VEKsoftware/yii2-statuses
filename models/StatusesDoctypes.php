@@ -4,6 +4,8 @@ namespace statuses\models;
 
 use Yii;
 
+use yii\helpers\ArrayHelper;
+
 /**
  * This is the model class for table "statuses_doctypes".
  *
@@ -41,8 +43,21 @@ class StatusesDoctypes extends \statuses\components\CommonRecord
     {
         return [
             'id' => Yii::t('statuses', 'ID'),
-            'name' => Yii::t('statuses', 'Name'),
-            'symbolic_id' => Yii::t('statuses', 'Symbolic ID'),
+            'name' => Yii::t('statuses', 'Statuses Doctypes Name'),
+            'symbolic_id' => Yii::t('statuses', 'Statuses Doctypes Symbolic ID'),
+        ];
+    }
+
+    /**
+     * @inherit
+     */
+    public function behaviors()
+    {
+        return [
+            'access'=>[
+                'class'=>\statuses\Statuses::getInstance()->accessClass,
+//                'relation'=>[$this,'getUserRelationName'],
+            ],
         ];
     }
 
@@ -57,9 +72,11 @@ class StatusesDoctypes extends \statuses\components\CommonRecord
     /**
      * create list [ $this->id => $this->name ]
      */
-    public function createDropdown() {
+    public static function createDropdown() {
         
-        self::find()->all();
+        $models = self::find()->all();
+        if( !empty( $models ) ) return ArrayHelper::map( $models, 'id', 'name' );
+        return [];
         
     }
 }

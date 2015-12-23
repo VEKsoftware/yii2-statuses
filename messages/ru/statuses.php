@@ -7,6 +7,7 @@ return [
     //'Source' => 'Перевод',
     
     'The requested page does not exist.' => 'Страница не существует.',
+    'Access restricted' => 'Доступ запрещён. Недостаточно прав у пользователя.',
     
     'Create' => 'Создать',
     'Update' => 'Редактировать',
@@ -38,4 +39,11 @@ return [
     'Statuses Links Right ID' => 'Права доступа',
     
     'Statuses Links is exists.' => 'Такая связь уже существует.',
+    
+    'Statuses Doctypes' => 'Типы документов для статусов',
+    
+    'Create Statuses Doctypes' => 'Создать новый тип документа',
+    
+    'Statuses Doctypes Name' => 'Наименование типа документа',
+    'Statuses Doctypes Symbolic ID' => 'Уникальный символьный ID',
 ];

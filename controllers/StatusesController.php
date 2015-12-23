@@ -152,7 +152,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
         
-        if(! $model->isAllowed('statuses.statuses.create.link')) {
+        if(! $model->isAllowed('statuses.statuses.link.create')) {
             throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
         }
         
@@ -199,7 +199,7 @@ class StatusesController extends Controller
         
         $model = $this->findModel( $status_from );
         
-        if(! $model->isAllowed('statuses.statuses.delete.link')) {
+        if(! $model->isAllowed('statuses.statuses.link.delete')) {
             throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
         }
         

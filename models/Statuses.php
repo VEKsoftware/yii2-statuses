@@ -74,7 +74,7 @@ class Statuses extends \statuses\components\CommonRecord
      */
     public function docTypeLabels() {
         
-        return \statuses\Statuses::getInstance()->docTypes;
+        return StatusesDoctypes::createDropdown();
         
     }
     
