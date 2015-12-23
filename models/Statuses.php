@@ -34,7 +34,7 @@ class Statuses extends \statuses\components\CommonRecord
     public function rules()
     {
         return [
-            [['doc_type'], 'required'],
+            [['doc_type','name'], 'required'],
             [['doc_type'], 'integer'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 200]

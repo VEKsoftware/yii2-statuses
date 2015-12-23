@@ -39,11 +39,6 @@ class Statuses extends \yii\base\Module
     public $accessRightsClass;
     
     /**
-     * Doc types list [ $id => $label ]
-     */
-    public $docTypes = [];
-    
-    /**
      * @inherit
      */
     public function init()

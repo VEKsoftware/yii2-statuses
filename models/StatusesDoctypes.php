@@ -31,7 +31,8 @@ class StatusesDoctypes extends \statuses\components\CommonRecord
     public function rules()
     {
         return [
-            [['name', 'symbolic_id'], 'string'],
+            [['name', 'symbolic_id'], 'required'],
+            [['name', 'symbolic_id'], 'string', 'max' => 200 ],
             [['symbolic_id'], 'unique']
         ];
     }
