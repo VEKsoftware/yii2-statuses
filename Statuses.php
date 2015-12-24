@@ -87,6 +87,30 @@ class Statuses extends \yii\base\Module
      */
     protected function checkAccessRightsClassConfig() {
         
+        // check property 'accessRightsClass'
+        
+        $rightsClass = $this->accessRightsClass;
+        $rights = new $rightsClass();
+        
+        if( !is_subclass_of( $rights, '\yii\db\ActiveRecord', false ) ) throw new ErrorException('Statuses::accessRightsClass must be extended from class \yii\db\ActiveRecord.');
+        
+        try {
+            $rights->id;
+            $rights->name;
+        } catch( \yii\base\UnknownPropertyException $e ) {
+            throw new ErrorException('Statuses::accessRightsClass must have properties: id, name.');
+        }
+        
+        // check property 'accessRightsSearchClass'
+        
+        $rightsSearchClass = $this->accessRightsSearchClass;
+        $rightsSearch = new $rightsSearchClass();
+        
+        if( !is_subclass_of( $rightsSearch, $this->accessRightsClass, false ) ) throw new ErrorException('Statuses::accessRightsSearchClass must be extended from class '.$this->accessRightsClass.'.');
+        
+        $reflectRightsSearch = new \ReflectionClass( $this->accessRightsSearchClass );
+        if( !$reflectRightsSearch->hasMethod('search') ) throw new ErrorException('Statuses::accessRightsSearchClass must have public method "search( array $params )".');
+        
         return true;
         
     }
