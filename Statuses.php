@@ -34,9 +34,10 @@ class Statuses extends \yii\base\Module
     public $accessClass;
     
     /**
-     * Class for access rights from DB
+     * Class for access rights from DB (and search rights)
      */
     public $accessRightsClass;
+    public $accessRightsSearchClass;
     
     /**
      * @inherit

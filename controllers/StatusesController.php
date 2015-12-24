@@ -17,9 +17,6 @@ use statuses\models\StatusesSearch;
 use statuses\models\StatusesLinks;
 use statuses\models\StatusesLinksSearch;
 
-use partneruser\models\RefRights;
-use partneruser\models\RefRightsSearch;
-
 /**
  * StatusesController implements the CRUD actions for Statuses model.
  */
@@ -173,7 +170,8 @@ class StatusesController extends Controller
         $searchModel = new StatusesSearch();
         $dataProviderModel = $searchModel->searchUnlink( $model, Yii::$app->request->queryParams );
         
-        $rightsSearchModel = new RefRightsSearch();
+        $rightsSearchClass = \statuses\Statuses::getInstance()->accessRightsSearchClass;
+        $rightsSearchModel = new $rightsSearchClass();
         $rightsDataProvider = $rightsSearchModel->search( Yii::$app->request->queryParams );
         
         return $this->render(
