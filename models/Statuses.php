@@ -89,7 +89,12 @@ class Statuses extends \statuses\components\CommonRecord
         return $this->doc_type;
         
     }
-    
+
+    public static function getAvailableStatuses($doc)
+    {
+        static::find()->where(['doc_type' => $doc])->all();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
