@@ -127,7 +127,7 @@ class Statuses extends \statuses\components\CommonRecord
      */
     public static function returnStatusId( $symbolicId )
     {
-        $status = Statuses::find()->where(['symbolic_id' => $symbolicId])->one();
+        $status = static::find()->where(['symbolic_id' => $symbolicId])->one();
         if( $status ) return $status->id;
         return false;
     }
