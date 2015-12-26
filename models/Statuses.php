@@ -125,14 +125,11 @@ class Statuses extends \statuses\components\CommonRecord
     /**
      * @inheritdoc
      */
-    public function afterSave($insert,$attr)
+    public static function returnStatusId( $symbolicId )
     {
-        /*
-        if($insert) {
-            
-        }
-        */
-        parent::afterSave($insert,$attr);
+        $status = Statuses::find()->where(['symbolic_id' => $symbolicId])->one();
+        if( $status ) return $status->id;
+        return false;
     }
     
     /**
@@ -141,6 +138,19 @@ class Statuses extends \statuses\components\CommonRecord
     public function getFullName()
     {
         return $this->docTypeName . ' - ' . $this->symbolic_id . ' - ' . $this->name;
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function afterSave($insert,$attr)
+    {
+        /*
+        if($insert) {
+            
+        }
+        */
+        parent::afterSave($insert,$attr);
     }
 
 }
