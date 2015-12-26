@@ -122,7 +122,7 @@ class StatusesLinks extends \statuses\components\CommonRecord
      * @inheritdoc
      */
     public function getStatusName() {
-        return $this->statusTo->name;
+        return $this->statusTo->symbolic_id . ' - ' . $this->statusTo->name;
     }
     
     /**

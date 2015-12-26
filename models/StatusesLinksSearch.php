@@ -64,7 +64,11 @@ class StatusesLinksSearch extends StatusesLinks
         
         $query
         ->joinWith(['statusTo' => function($query) {
-            $query->where('"statuses"."name" LIKE '."'%".$this->statusName."%'");
+            $query->where([
+                'or',
+                '"statuses"."name" LIKE '."'%".$this->statusName."%'",
+                '"statuses"."symbolic_id" LIKE '."'%".$this->statusName."%'"
+            ]);
         } ])
         ->joinWith(['right' => function($query) {
             $query->where('"ref_rights"."name" LIKE '."'%".$this->rightName."%'");

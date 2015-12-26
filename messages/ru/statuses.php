@@ -27,6 +27,7 @@ return [
     'Statuses Doc Type' => 'Тип документа',
     'Statuses Name' => 'Наименование статуса',
     'Statuses Description' => 'Описание статуса',
+    'Statuses Symbolic Id' => 'Символьный ID',
     
     'Statuses Users' => 'Пользователи',
     'Statuses Payments' => 'Платежи',

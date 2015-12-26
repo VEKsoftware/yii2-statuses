@@ -9,7 +9,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model statuses\models\Statuses */
 
-$this->title = $model->name;
+$this->title = $model->fullName;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('statuses', 'Statuses'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => $model->docTypeName,
             ],
+            'symbolic_id',
             'name',
             'description',
         ],

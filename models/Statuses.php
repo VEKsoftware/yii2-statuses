@@ -34,10 +34,12 @@ class Statuses extends \statuses\components\CommonRecord
     public function rules()
     {
         return [
-            [['doc_type','name'], 'required'],
+            [['doc_type','name','symbolic_id'], 'required'],
             [['doc_type'], 'integer'],
             [['description'], 'string'],
-            [['name'], 'string', 'max' => 200]
+            [['name'], 'string', 'max' => 200],
+            [['symbolic_id'], 'string'],
+            [['doc_type','symbolic_id'], 'unique', 'targetAttribute' => ['doc_type','symbolic_id']],
         ];
     }
 
@@ -51,6 +53,7 @@ class Statuses extends \statuses\components\CommonRecord
             'doc_type' => Yii::t('statuses', 'Statuses Doc Type'),
             'name' => Yii::t('statuses', 'Statuses Name'),
             'description' => Yii::t('statuses', 'Statuses Description'),
+            'symbolic_id' => Yii::t('statuses', 'Statuses Symbolic Id'),
         ];
     }
     
@@ -130,6 +133,14 @@ class Statuses extends \statuses\components\CommonRecord
         }
         */
         parent::afterSave($insert,$attr);
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function getFullName()
+    {
+        return $this->docTypeName . ' - ' . $this->symbolic_id . ' - ' . $this->name;
     }
 
 }

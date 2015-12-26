@@ -20,7 +20,7 @@ class StatusesSearch extends Statuses
     {
         return [
             [['id', 'doc_type'], 'integer'],
-            [['name', 'description'], 'safe'],
+            [['name', 'description','symbolic_id'], 'safe'],
         ];
     }
 
@@ -56,7 +56,8 @@ class StatusesSearch extends Statuses
             'doc_type' => $this->doc_type,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+        ->andFilterWhere(['like', 'symbolic_id', $this->symbolic_id]);
         return $dataProvider;
     }
     
@@ -79,7 +80,8 @@ class StatusesSearch extends Statuses
         $this->load($params);
         if ( !$this->validate() ) return $dataProvider;
         
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+        ->andFilterWhere(['like', 'symbolic_id', $this->symbolic_id]);
         return $dataProvider;
         
     }

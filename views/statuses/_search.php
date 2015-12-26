@@ -19,6 +19,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'doc_type') ?>
 
+    <?= $form->field($model, 'symbolic_id') ?>
+
     <?= $form->field($model, 'name') ?>
 
     <?= $form->field($model, 'description') ?>

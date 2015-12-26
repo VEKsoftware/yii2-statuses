@@ -8,9 +8,9 @@ use yii\grid\GridView;
 /* @var $searchModel statuses\models\StatusesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('statuses', 'Create Statuses Link') . ' ' . $model->name;
+$this->title = Yii::t('statuses', 'Create Statuses Link') . ': ' . $model->fullName;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('statuses', 'Statuses'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->fullName, 'url' => ['view', 'id' => $model->id]];
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('statuses', 'View Statuses Links'), 'url' => ['link-view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -74,6 +74,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'width' => '30px',
                         ],
                         'filter' => false,
+                    ],
+                    [
+                        'attribute' => 'symbolic_id',
                     ],
                     [
                         'attribute' => 'name',
