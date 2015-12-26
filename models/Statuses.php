@@ -95,7 +95,7 @@ class Statuses extends \statuses\components\CommonRecord
 
     public static function getAvailableStatuses($doc)
     {
-        static::find()->where(['doc_type' => $doc])->all();
+        return static::find()->where(['doc_type' => $doc->id])->all();
     }
 
     /**
