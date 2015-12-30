@@ -125,7 +125,7 @@ class Statuses extends \statuses\components\CommonRecord
     /**
      * @inheritdoc
      */
-    public static function returnStatusId( $symbolicId )
+    public static function findByTag( $symbolicId )
     {
         $status = static::find()->where(['symbolic_id' => $symbolicId])->one();
         if( $status ) return $status->id;
