@@ -8,6 +8,7 @@ return [
     
     'The requested page does not exist.' => 'Страница не существует.',
     'Access restricted' => 'Доступ запрещён. Недостаточно прав у пользователя.',
+    'Document Types' => 'Типы документов',
     
     'Create' => 'Создать',
     'Update' => 'Редактировать',
