@@ -18,7 +18,8 @@ return [
     'Are you sure you want to delete this item?' => 'Вы уверены, что хотите удалить это?',
     
     'Create Statuses' => 'Создать статус',
-    'Update Statuses' => 'Редактирование статуса',
+    'Update Statuses' => 'Редактирование основных свойств статуса',
+    'View Statuses' => 'Редактировать',
     
     'View Statuses Links' => 'Список связей статуса',
     'Update Statuses Links' => 'Редактировать связи статуса',

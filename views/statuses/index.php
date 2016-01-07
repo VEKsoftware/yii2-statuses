@@ -36,8 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'symbolic_id',
             'name',
             'description',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'label' => '',
+                'format' => 'raw',
+                'value' => function( $model, $key ) {
+                    return Html::a( Yii::t('statuses', 'View Statuses'), ['view', 'id' => $key ] );
+                },
+            ],
         ],
     ]); ?>
 
