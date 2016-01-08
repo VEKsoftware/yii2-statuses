@@ -93,9 +93,18 @@ class Statuses extends \statuses\components\CommonRecord
         
     }
 
-    public static function getAvailableStatuses($doc)
+    public static function getAvailableStatuses($doc, $rightId)
     {
-        return static::find()->where(['doc_type' => $doc->id])->all();
+        $query = static::find()
+            //->joinWith('statusesLinksFrom')
+            ->joinWith('statusesLinksTo')
+            ->where([
+                'and',
+                ['doc_type' => $doc->id],
+                //[StatusesLinks::tableName().'.status_from' => $rightId],
+                ['statusesLinksTo'.'.status_from' => $rightId],
+            ]);
+        return $query->all();
     }
 
     /**
@@ -109,7 +118,7 @@ class Statuses extends \statuses\components\CommonRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStatusesLinks()
+    public function getStatusesLinksFrom()
     {
         return $this->hasMany(StatusesLinks::className(), ['status_from' => 'id']);
     }
@@ -117,9 +126,10 @@ class Statuses extends \statuses\components\CommonRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStatusesLinks0()
+    public function getStatusesLinksTo()
     {
-        return $this->hasMany(StatusesLinks::className(), ['status_to' => 'id']);
+        $query = $this->hasMany(StatusesLinks::className(), ['status_to' => 'id']);
+        return $query->from(['statusesLinksTo' => StatusesLinks::tableName()]);
     }
     
     /**
