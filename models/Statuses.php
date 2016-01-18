@@ -164,6 +164,7 @@ class Statuses extends \statuses\components\CommonRecord
         if( is_array($symbolicId) ) {
             
             $status = $query->andWhere(['{{statuses}}.symbolic_id' => $symbolicId])->all();
+            
             if( $status ) return $status;
             
         } else {
