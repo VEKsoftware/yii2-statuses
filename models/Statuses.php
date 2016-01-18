@@ -4,6 +4,8 @@ namespace statuses\models;
 
 use Yii;
 
+use yii\helpers\ArrayHelper;
+
 use statuses\models\StatusesLinks;
 use statuses\models\StatusesDoctypes;
 
@@ -137,9 +139,41 @@ class Statuses extends \statuses\components\CommonRecord
      */
     public static function findByTag( $symbolicId )
     {
-        $status = static::find()->where(['symbolic_id' => $symbolicId])->one();
-        if( $status ) return $status->id;
+        if( is_array($symbolicId) ) {
+            
+            $status = static::find()->where(['symbolic_id' => $symbolicId])->all();
+            if( $status ) return ArrayHelper::getColumn($status, 'id');
+            
+        } else {
+        
+            $status = static::find()->where(['symbolic_id' => $symbolicId])->one();
+            if( $status ) return $status->id;
+            
+        }
+            
         return false;
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public static function findByDocTypeTag( $docType, $symbolicId )
+    {
+        $query = static::find()->joinWith('docType')->where(['{{statuses_doctypes}}.symbolic_id' => $docType]);
+        
+        if( is_array($symbolicId) ) {
+            
+            $status = $query->andWhere(['{{statuses}}.symbolic_id' => $symbolicId])->all();
+            if( $status ) return $status;
+            
+        } else {
+        
+            $status = $query->andWhere(['{{statuses}}.symbolic_id' => $symbolicId])->one();
+            if( $status ) return $status;
+            
+        }
+            
+        return null;
     }
     
     /**
