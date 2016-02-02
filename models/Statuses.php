@@ -242,7 +242,7 @@ class Statuses extends \statuses\components\CommonRecord
         if( !isset(static::$_statuses[$docType]) ) {
             static::$_statuses[$docType] = static::findStatuses( $docType )->all();
         }
-        return = static::$_statuses[$docType];
+        return static::$_statuses[$docType];
     }
 
     /**
