@@ -97,18 +97,11 @@ class Statuses extends \statuses\components\CommonRecord
         
     }
 
-    public static function getAvailableStatuses($doc, $rightId)
+    public function getAvailableStatuses() //($doc, $rightId)
     {
-        $query = static::find()
-            //->joinWith('statusesLinksFrom')
-            ->joinWith('statusesLinksTo')
-            ->where([
-                'and',
-                ['doc_type' => $doc->id],
-                //[StatusesLinks::tableName().'.status_from' => $rightId],
-                ['statusesLinksTo'.'.status_from' => $rightId],
-            ]);
-        return $query->all();
+        return $this->hasMany(Statuses::className(),['id' => 'status_to'])
+            ->via('statusesLinksFrom')
+        ;
     }
 
     /**
@@ -132,8 +125,9 @@ class Statuses extends \statuses\components\CommonRecord
      */
     public function getStatusesLinksTo()
     {
-        $query = $this->hasMany(StatusesLinks::className(), ['status_to' => 'id']);
-        return $query->from(['statusesLinksTo' => StatusesLinks::tableName()]);
+        return $this->hasMany(StatusesLinks::className(), ['status_to' => 'id'])
+            ->from(['statusesLinksTo' => StatusesLinks::tableName()])
+        ;
     }
     
     /**
@@ -237,7 +231,7 @@ class Statuses extends \statuses\components\CommonRecord
         if( !isset(static::$_statuses[$docType]) ) {
             static::$_statuses[$docType] = static::findStatuses( $docType )->all();
         }
-        return = static::$_statuses[$docType];
+        return static::$_statuses[$docType];
     }
 
     /**

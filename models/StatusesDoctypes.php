@@ -91,7 +91,7 @@ class StatusesDoctypes extends \statuses\components\CommonRecord
      */
     public function getStatuses()
     {
-        return $this->hasMany(Statuses::className(), ['doc_type' => 'id']);
+        return $this->hasMany(Statuses::className(), ['doc_type' => 'id'])->indexBy('symbolic_id');
     }
     
     /**
