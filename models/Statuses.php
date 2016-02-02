@@ -22,6 +22,8 @@ use statuses\models\StatusesDoctypes;
  */
 class Statuses extends \statuses\components\CommonRecord
 {
+    private static $_statuses;
+
     /**
      * @inheritdoc
      */
@@ -176,26 +178,74 @@ class Statuses extends \statuses\components\CommonRecord
             
         return null;
     }
-    
+
+    /**
+     * Find all statuses for the specific doc type
+     *
+     * @param string $docType The symbolic tag of the document type
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findStatuses( $docType )
+    {
+        return = static::find()
+            ->joinWith('docType')
+            ->where(['[[statuses_doctypes.symbolic_id]]' => $docType])
+        ;
+    }
+
+    /**
+     * Find certain status by tag
+     *
+     * @param string $docType The symbolic tag of the document type
+     * @param string|string[] $symbolicId The symbolic tag of the status to search for
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findStatus( $docType, $symbolicId )
+    {
+        return static::findStatuses( $docType )
+            ->andWhere(['[[statuses.symbolic_id]]' => $symbolicId])
+        ;
+    }
+
+    /**
+     * Find all statuses allowed by access rights
+     *
+     * @param string $docType The symbolic tag of the document type
+     * @param string|string[] $symbolicId The symbolic tags of the rights
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findAvailableStatuses( $docType, $rightId )
+    {
+        return static::findStatuses( $docType )
+            ->joinWith('statusesLinksTo')
+            ->andWhere(['[[statusesLinksTo.status_from]]' => $rightId])
+        ;
+    }
+
+    /**
+     * Return an array of all statuses for the specific doc type
+     *
+     * @param string $docType The symbolic tag of the document type
+     *
+     * @return static[]
+     */
+    public static function listStatuses( $docType )
+    {
+        if( !isset(static::$_statuses[$docType]) ) {
+            static::$_statuses[$docType] = static::findStatuses( $docType )->all();
+        }
+        return = static::$_statuses[$docType];
+    }
+
     /**
      * @inheritdoc
      */
     public function getFullName()
     {
         return $this->docTypeName . ' - ' . $this->symbolic_id . ' - ' . $this->name;
-    }
-    
-    /**
-     * @inheritdoc
-     */
-    public function afterSave($insert,$attr)
-    {
-        /*
-        if($insert) {
-            
-        }
-        */
-        parent::afterSave($insert,$attr);
     }
 
 }
