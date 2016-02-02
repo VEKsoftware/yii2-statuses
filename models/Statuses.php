@@ -97,7 +97,7 @@ class Statuses extends \statuses\components\CommonRecord
         
     }
 
-    public static function getAvailableStatuses($doc, $rightId)
+    public static function getAvailableStatuses($doc, $statusFromId, $rightId = null)
     {
         $query = static::find()
             //->joinWith('statusesLinksFrom')
@@ -106,8 +106,13 @@ class Statuses extends \statuses\components\CommonRecord
                 'and',
                 ['doc_type' => $doc->id],
                 //[StatusesLinks::tableName().'.status_from' => $rightId],
-                ['statusesLinksTo'.'.status_from' => $rightId],
+                ['statusesLinksTo'.'.status_from' => $statusFromId],
             ]);
+        
+        if( !is_null( $rightId ) ) {
+            $query->andWhere(['statusesLinksTo'.'.right_id' => $rightId ]);
+        }
+        
         return $query->all();
     }
 
