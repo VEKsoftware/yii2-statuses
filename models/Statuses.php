@@ -188,7 +188,7 @@ class Statuses extends \statuses\components\CommonRecord
      */
     public static function findStatuses( $docType )
     {
-        return = static::find()
+        return static::find()
             ->joinWith('docType')
             ->where(['[[statuses_doctypes.symbolic_id]]' => $docType])
         ;

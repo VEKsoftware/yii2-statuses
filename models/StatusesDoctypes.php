@@ -62,6 +62,25 @@ class StatusesDoctypes extends \statuses\components\CommonRecord
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findDocs()
+    {
+        return static::find();
+    }
+
+    /**
+     * @return static[] List of doc types
+     */
+    public static function listDocs()
+    {
+        return static::findDocs()->all();
+    }
+
+    /**
+     * @return static
+     */
     public static function findDoc($doc_string)
     {
         return static::find()->where(['symbolic_id' => $doc_string])->one();
