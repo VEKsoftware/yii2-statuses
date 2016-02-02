@@ -86,6 +86,14 @@ class Statuses extends \statuses\components\CommonRecord
     }
     
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDocType()
+    {
+        return $this->hasOne( StatusesDoctypes::className(), ['id' => 'doc_type']);
+    }
+
+    /**
      * @return string (doc_type label) || integer (doc_type) || null
      */
     public function getDocTypeName() {
@@ -97,19 +105,13 @@ class Statuses extends \statuses\components\CommonRecord
         
     }
 
-    public function getAvailableStatuses() //($doc, $rightId)
+    public function getAvailableStatuses($rightIds = NULL) //($doc, $rightId)
     {
         return $this->hasMany(Statuses::className(),['id' => 'status_to'])
-            ->via('statusesLinksFrom')
+            ->via('statusesLinksFrom', function($q) use($rightIds) {
+                $q->andFilterWhere(['right_id' => $rightIds]);
+            })
         ;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDocType()
-    {
-        return $this->hasOne( StatusesDoctypes::className(), ['id' => 'doc_type']);
     }
 
     /**
