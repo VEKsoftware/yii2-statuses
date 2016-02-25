@@ -19,7 +19,7 @@ class StatusesDoctypesSearch extends StatusesDoctypes
     {
         return [
             [['id'], 'integer'],
-            [['name', 'symbolic_id'], 'safe'],
+            [['name', 'symbolic_id'], 'string'],
         ];
     }
 

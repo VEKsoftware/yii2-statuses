@@ -23,7 +23,7 @@ class StatusesLinksSearch extends StatusesLinks
     {
         return [
             [['status_from', 'status_to', 'right_id'], 'integer'],
-            [['statusName', 'rightName'], 'safe'],
+            [['statusName', 'rightName'], 'string'],
         ];
     }
 

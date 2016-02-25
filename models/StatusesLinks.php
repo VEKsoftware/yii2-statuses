@@ -35,8 +35,6 @@ class StatusesLinks extends \statuses\components\CommonRecord
             [['status_from', 'status_to', 'right_id'], 'integer'],
             
             [['status_from', 'status_to', 'right_id'], 'validateExists'],
-            
-            [['right'], 'safe'],
         ];
     }
     

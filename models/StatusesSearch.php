@@ -20,7 +20,7 @@ class StatusesSearch extends Statuses
     {
         return [
             [['id', 'doc_type'], 'integer'],
-            [['name', 'description','symbolic_id'], 'safe'],
+            [['name', 'description','symbolic_id'], 'string'],
         ];
     }
 
