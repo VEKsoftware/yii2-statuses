@@ -2,6 +2,8 @@
 
 namespace statuses\models;
 
+use statuses\components\CommonRecord;
+use statuses\Statuses;
 use Yii;
 
 /**
@@ -10,11 +12,11 @@ use Yii;
  * @property int $status_from
  * @property int $status_to
  * @property int $right_id
- * @property RefRights $right
+ * @property mixed $right
  * @property Statuses $statusFrom
  * @property Statuses $statusTo
  */
-class StatusesLinks extends \statuses\components\CommonRecord
+class StatusesLinks extends CommonRecord
 {
     /**
      * {@inheritdoc}
@@ -22,6 +24,14 @@ class StatusesLinks extends \statuses\components\CommonRecord
     public static function tableName()
     {
         return '{{%statuses_links}}';
+    }
+
+    /**
+     * list of primary keys for model identification.
+     */
+    public static function primaryKey()
+    {
+        return ['status_from', 'status_to', 'right_id'];
     }
 
     /**
@@ -35,14 +45,6 @@ class StatusesLinks extends \statuses\components\CommonRecord
 
             [['status_from', 'status_to', 'right_id'], 'validateExists'],
         ];
-    }
-
-    /**
-     * list of primary keys for model identification.
-     */
-    public static function primaryKey()
-    {
-        return ['status_from', 'status_to', 'right_id'];
     }
 
     /**
@@ -87,7 +89,7 @@ class StatusesLinks extends \statuses\components\CommonRecord
     {
         return [
             'access' => [
-                'class' => \statuses\Statuses::getInstance()->accessClass,
+                'class' => Statuses::getInstance()->accessClass,
             ],
         ];
     }
@@ -97,8 +99,8 @@ class StatusesLinks extends \statuses\components\CommonRecord
      */
     public function getRight()
     {
-        $class = \statuses\Statuses::getInstance()->accessRightsClass;
-
+        /** @var Statuses $class */
+        $class = Statuses::getInstance()->accessRightsClass;
         return $this->hasOne($class::className(), ['id' => 'right_id']);
     }
 
@@ -123,7 +125,7 @@ class StatusesLinks extends \statuses\components\CommonRecord
      */
     public function getStatusName()
     {
-        return $this->statusTo->symbolic_id.' - '.$this->statusTo->name;
+        return $this->statusTo->symbolic_id . ' - ' . $this->statusTo->name;
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace statuses\models;
 
+use statuses\components\CommonRecord;
+use statuses\Statuses;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -13,7 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property string $symbolic_id
  * @property Statuses[] $statuses
  */
-class StatusesDoctypes extends \statuses\components\CommonRecord
+class StatusesDoctypes extends CommonRecord
 {
     /**
      * {@inheritdoc}
@@ -21,6 +23,44 @@ class StatusesDoctypes extends \statuses\components\CommonRecord
     public static function tableName()
     {
         return '{{%statuses_doctypes}}';
+    }
+
+    /**
+     * @return static[] List of doc types
+     */
+    public static function listDocs()
+    {
+        return static::findDocs()->all();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findDocs()
+    {
+        return static::find();
+    }
+
+    /**
+     * @param $doc_string
+     * @return static
+     */
+    public static function findDoc($doc_string)
+    {
+        return static::find()->where(['symbolic_id' => $doc_string])->one();
+    }
+
+    /**
+     * create list [ $this->id => $this->name ].
+     */
+    public static function createDropdown()
+    {
+        $models = self::find()->all();
+        if (!empty($models)) {
+            return ArrayHelper::map($models, 'id', 'name');
+        }
+
+        return [];
     }
 
     /**
@@ -54,7 +94,7 @@ class StatusesDoctypes extends \statuses\components\CommonRecord
     {
         return [
             'access' => [
-                'class' => \statuses\Statuses::getInstance()->accessClass,
+                'class' => Statuses::getInstance()->accessClass,
 //                'relation'=>[$this,'getUserRelationName'],
             ],
         ];
@@ -63,45 +103,8 @@ class StatusesDoctypes extends \statuses\components\CommonRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public static function findDocs()
-    {
-        return static::find();
-    }
-
-    /**
-     * @return static[] List of doc types
-     */
-    public static function listDocs()
-    {
-        return static::findDocs()->all();
-    }
-
-    /**
-     * @return static
-     */
-    public static function findDoc($doc_string)
-    {
-        return static::find()->where(['symbolic_id' => $doc_string])->one();
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getStatuses()
     {
         return $this->hasMany(Statuses::className(), ['doc_type' => 'id'])->indexBy('symbolic_id');
-    }
-
-    /**
-     * create list [ $this->id => $this->name ].
-     */
-    public static function createDropdown()
-    {
-        $models = self::find()->all();
-        if (!empty($models)) {
-            return ArrayHelper::map($models, 'id', 'name');
-        }
-
-        return [];
     }
 }

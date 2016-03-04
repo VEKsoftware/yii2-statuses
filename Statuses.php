@@ -3,13 +3,18 @@
 namespace statuses;
 
 use yii\base\ErrorException;
+use yii\base\Module;
+use yii\base\UnknownPropertyException;
+use yii\db\Connection;
 
 /**
  * Main class for Statuses module.
  *
  * @prop string|array signedUp The route to go after successful login
+ * @property mixed symbolic_id
+ * @property mixed name
  */
-class Statuses extends \yii\base\Module
+class Statuses extends Module
 {
     /**
      * @inherit
@@ -22,7 +27,7 @@ class Statuses extends \yii\base\Module
     public $project_id = 2;
 
     /**
-     * Database component to use in the module.
+     * @var null|Connection Database component to use in the module.
      */
     public $db;
 
@@ -51,24 +56,7 @@ class Statuses extends \yii\base\Module
     }
 
     /**
-     * Initialization of the i18n translation module.
-     */
-    public function registerTranslations()
-    {
-        \Yii::$app->i18n->translations['statuses'] = [
-            'class' => 'yii\i18n\PhpMessageSource',
-            'sourceLanguage' => 'en',
-            'basePath' => '@statuses/messages',
-
-            'fileMap' => [
-                'statuses' => 'statuses.php',
-            ],
-
-        ];
-    }
-
-    /**
-     * 
+     *
      */
     protected function checkAccessClassConfig()
     {
@@ -80,7 +68,7 @@ class Statuses extends \yii\base\Module
     }
 
     /**
-     * 
+     *
      */
     protected function checkAccessRightsClassConfig()
     {
@@ -97,7 +85,7 @@ class Statuses extends \yii\base\Module
         try {
             $rights->id;
             $rights->name;
-        } catch (\yii\base\UnknownPropertyException $e) {
+        } catch (UnknownPropertyException $e) {
             throw new ErrorException('Statuses::accessRightsClass must have properties: id, name.');
         }
 
@@ -107,7 +95,7 @@ class Statuses extends \yii\base\Module
         $rightsSearch = new $rightsSearchClass();
 
         if (!is_subclass_of($rightsSearch, $this->accessRightsClass, false)) {
-            throw new ErrorException('Statuses::accessRightsSearchClass must be extended from class '.$this->accessRightsClass.'.');
+            throw new ErrorException('Statuses::accessRightsSearchClass must be extended from class ' . $this->accessRightsClass . '.');
         }
 
         $reflectRightsSearch = new \ReflectionClass($this->accessRightsSearchClass);
@@ -116,5 +104,22 @@ class Statuses extends \yii\base\Module
         }
 
         return true;
+    }
+
+    /**
+     * Initialization of the i18n translation module.
+     */
+    public function registerTranslations()
+    {
+        \Yii::$app->i18n->translations['statuses'] = [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en',
+            'basePath' => '@statuses/messages',
+
+            'fileMap' => [
+                'statuses' => 'statuses.php',
+            ],
+
+        ];
     }
 }

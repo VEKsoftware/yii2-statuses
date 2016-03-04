@@ -1,9 +1,9 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
-use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model statuses\models\Statuses */
@@ -72,8 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
-                    'view' => function ($url, $model, $key) { return; },
-                    'update' => function ($url, $model, $key) { return; },
+                    'view' => function ($url, $model, $key) {
+                        return;
+                    },
+                    'update' => function ($url, $model, $key) {
+                        return;
+                    },
                     'delete' => function ($url, $model, $key) {
                         return Html::a(Yii::t('statuses', 'Delete'), $url, [
                             'data' => [

@@ -2,13 +2,14 @@
 
 namespace statuses\controllers;
 
-use Yii;
 use statuses\models\StatusesDoctypes;
 use statuses\models\StatusesDoctypesSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use Yii;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 
 /**
  * StatusesDoctypesController implements the CRUD actions for StatusesDoctypes model.
@@ -40,8 +41,8 @@ class StatusesDoctypesController extends Controller
 
     /**
      * Lists all StatusesDoctypes models.
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
      */
     public function actionIndex()
     {
@@ -63,8 +64,9 @@ class StatusesDoctypesController extends Controller
      * Displays a single StatusesDoctypes model.
      *
      * @param int $id
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -80,10 +82,29 @@ class StatusesDoctypesController extends Controller
     }
 
     /**
+     * Finds the StatusesDoctypes model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     *
+     * @param int $id
+     *
+     * @return StatusesDoctypes the loaded model
+     *
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = StatusesDoctypes::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /**
      * Creates a new StatusesDoctypes model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
      */
     public function actionCreate()
     {
@@ -107,8 +128,9 @@ class StatusesDoctypesController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param int $id
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -132,8 +154,10 @@ class StatusesDoctypesController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      *
      * @param int $id
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     * @throws \Exception
      */
     public function actionDelete($id)
     {
@@ -146,24 +170,5 @@ class StatusesDoctypesController extends Controller
         $model->delete();
 
         return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the StatusesDoctypes model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param int $id
-     *
-     * @return StatusesDoctypes the loaded model
-     *
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = StatusesDoctypes::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
     }
 }

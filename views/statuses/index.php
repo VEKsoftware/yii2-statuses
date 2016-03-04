@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'doc_type',
                 'filter' => $searchModel->docTypeLabels(),
-                'value' => function ($model, $key) {
+                'value' => function ($model) {
 
                     return $model->docTypeName;
 

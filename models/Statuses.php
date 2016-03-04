@@ -2,7 +2,9 @@
 
 namespace statuses\models;
 
+use statuses\components\CommonRecord;
 use Yii;
+use yii\db\ActiveQueryInterface;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -12,10 +14,13 @@ use yii\helpers\ArrayHelper;
  * @property int $doc_type
  * @property string $name
  * @property string $description
- * @property StatusesLink[] $statusesLinks
- * @property StatusesLink[] $statusesLinks0
+ * @property StatusesLinks[] $statusesLinks
+ * @property StatusesLinks[] $statusesLinks0
+ * @property mixed docTypeName
+ * @property mixed symbolic_id
+ * @property mixed fullName
  */
-class Statuses extends \statuses\components\CommonRecord
+class Statuses extends CommonRecord
 {
     private static $_statuses;
 
@@ -25,6 +30,110 @@ class Statuses extends \statuses\components\CommonRecord
     public static function tableName()
     {
         return '{{%statuses}}';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findByTag($symbolicId)
+    {
+        if (is_array($symbolicId)) {
+            $status = static::find()->where(['symbolic_id' => $symbolicId])->all();
+            if ($status) {
+                return ArrayHelper::getColumn($status, 'id');
+            }
+        } else {
+            $status = static::find()->where(['symbolic_id' => $symbolicId])->one();
+            if ($status) {
+                /** @var Statuses $status */
+                return $status->id;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findByDocTypeTag($docType, $symbolicId)
+    {
+        $query = static::find()->joinWith('docType')->where(['{{statuses_doctypes}}.symbolic_id' => $docType]);
+
+        if (is_array($symbolicId)) {
+            $status = $query->andWhere(['{{statuses}}.symbolic_id' => $symbolicId])->all();
+
+            if ($status) {
+                return $status;
+            }
+        } else {
+            $status = $query->andWhere(['{{statuses}}.symbolic_id' => $symbolicId])->one();
+            if ($status) {
+                return $status;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find certain status by tag.
+     *
+     * @param string $docType The symbolic tag of the document type
+     * @param string|string[] $symbolicId The symbolic tag of the status to search for
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findStatus($docType, $symbolicId)
+    {
+        return static::findStatuses($docType)
+            ->andWhere(['[[statuses.symbolic_id]]' => $symbolicId]);
+    }
+
+    /**
+     * Find all statuses for the specific doc type.
+     *
+     * @param string $docType The symbolic tag of the document type
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findStatuses($docType)
+    {
+        return static::find()
+            ->joinWith('docType')
+            ->where(['[[statuses_doctypes.symbolic_id]]' => $docType]);
+    }
+
+    /**
+     * Find all statuses allowed by access rights.
+     *
+     * @param string $docType The symbolic tag of the document type
+     * @param $rightId
+     * @return \yii\db\ActiveQuery
+     * @internal param string|\string[] $symbolicId The symbolic tags of the rights
+     *
+     */
+    public static function findAvailableStatuses($docType, $rightId)
+    {
+        return static::findStatuses($docType)
+            ->joinWith('statusesLinksTo')
+            ->andWhere(['[[statusesLinksTo.status_from]]' => $rightId]);
+    }
+
+    /**
+     * Return an array of all statuses for the specific doc type.
+     *
+     * @param string $docType The symbolic tag of the document type
+     *
+     * @return static[]
+     */
+    public static function listStatuses($docType)
+    {
+        if (!isset(static::$_statuses[$docType])) {
+            static::$_statuses[$docType] = static::findStatuses($docType)->all();
+        }
+
+        return static::$_statuses[$docType];
     }
 
     /**
@@ -70,16 +179,6 @@ class Statuses extends \statuses\components\CommonRecord
     }
 
     /**
-     * Doc types labels.
-     * 
-     * @return array
-     */
-    public function docTypeLabels()
-    {
-        return StatusesDoctypes::createDropdown();
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getDocType()
@@ -101,13 +200,23 @@ class Statuses extends \statuses\components\CommonRecord
         return $this->doc_type;
     }
 
+    /**
+     * Doc types labels.
+     *
+     * @return array
+     */
+    public function docTypeLabels()
+    {
+        return StatusesDoctypes::createDropdown();
+    }
+
     public function getAvailableStatuses($rightIds = null) //($doc, $rightId)
     {
         return $this->hasMany(self::className(), ['id' => 'status_to'])
             ->via('statusesLinksFrom', function ($q) use ($rightIds) {
+                /** @var ActiveQueryInterface $q */
                 $q->andFilterWhere(['right_id' => $rightIds]);
-            })
-        ;
+            });
     }
 
     /**
@@ -124,113 +233,7 @@ class Statuses extends \statuses\components\CommonRecord
     public function getStatusesLinksTo()
     {
         return $this->hasMany(StatusesLinks::className(), ['status_to' => 'id'])
-            ->from(['statusesLinksTo' => StatusesLinks::tableName()])
-        ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function findByTag($symbolicId)
-    {
-        if (is_array($symbolicId)) {
-            $status = static::find()->where(['symbolic_id' => $symbolicId])->all();
-            if ($status) {
-                return ArrayHelper::getColumn($status, 'id');
-            }
-        } else {
-            $status = static::find()->where(['symbolic_id' => $symbolicId])->one();
-            if ($status) {
-                return $status->id;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function findByDocTypeTag($docType, $symbolicId)
-    {
-        $query = static::find()->joinWith('docType')->where(['{{statuses_doctypes}}.symbolic_id' => $docType]);
-
-        if (is_array($symbolicId)) {
-            $status = $query->andWhere(['{{statuses}}.symbolic_id' => $symbolicId])->all();
-
-            if ($status) {
-                return $status;
-            }
-        } else {
-            $status = $query->andWhere(['{{statuses}}.symbolic_id' => $symbolicId])->one();
-            if ($status) {
-                return $status;
-            }
-        }
-
-        return;
-    }
-
-    /**
-     * Find all statuses for the specific doc type.
-     *
-     * @param string $docType The symbolic tag of the document type
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public static function findStatuses($docType)
-    {
-        return static::find()
-            ->joinWith('docType')
-            ->where(['[[statuses_doctypes.symbolic_id]]' => $docType])
-        ;
-    }
-
-    /**
-     * Find certain status by tag.
-     *
-     * @param string          $docType    The symbolic tag of the document type
-     * @param string|string[] $symbolicId The symbolic tag of the status to search for
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public static function findStatus($docType, $symbolicId)
-    {
-        return static::findStatuses($docType)
-            ->andWhere(['[[statuses.symbolic_id]]' => $symbolicId])
-        ;
-    }
-
-    /**
-     * Find all statuses allowed by access rights.
-     *
-     * @param string          $docType    The symbolic tag of the document type
-     * @param string|string[] $symbolicId The symbolic tags of the rights
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public static function findAvailableStatuses($docType, $rightId)
-    {
-        return static::findStatuses($docType)
-            ->joinWith('statusesLinksTo')
-            ->andWhere(['[[statusesLinksTo.status_from]]' => $rightId])
-        ;
-    }
-
-    /**
-     * Return an array of all statuses for the specific doc type.
-     *
-     * @param string $docType The symbolic tag of the document type
-     *
-     * @return static[]
-     */
-    public static function listStatuses($docType)
-    {
-        if (!isset(static::$_statuses[$docType])) {
-            static::$_statuses[$docType] = static::findStatuses($docType)->all();
-        }
-
-        return static::$_statuses[$docType];
+            ->from(['statusesLinksTo' => StatusesLinks::tableName()]);
     }
 
     /**
@@ -238,6 +241,6 @@ class Statuses extends \statuses\components\CommonRecord
      */
     public function getFullName()
     {
-        return $this->docTypeName.' - '.$this->symbolic_id.' - '.$this->name;
+        return $this->docTypeName . ' - ' . $this->symbolic_id . ' - ' . $this->name;
     }
 }

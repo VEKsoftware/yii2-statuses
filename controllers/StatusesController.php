@@ -2,16 +2,16 @@
 
 namespace statuses\controllers;
 
-use Yii;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\web\ForbiddenHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use statuses\models\Statuses;
-use statuses\models\StatusesSearch;
 use statuses\models\StatusesLinks;
 use statuses\models\StatusesLinksSearch;
+use statuses\models\StatusesSearch;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 
 /**
  * StatusesController implements the CRUD actions for Statuses model.
@@ -44,8 +44,8 @@ class StatusesController extends Controller
 
     /**
      * Lists all Statuses models.
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
      */
     public function actionIndex()
     {
@@ -67,8 +67,9 @@ class StatusesController extends Controller
      * Displays a single Statuses model.
      *
      * @param int $id
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -90,10 +91,29 @@ class StatusesController extends Controller
     }
 
     /**
+     * Finds the Statuses model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     *
+     * @param int $id
+     *
+     * @return Statuses the loaded model
+     *
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Statuses::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException(Yii::t('statuses', 'The requested page does not exist.'));
+        }
+    }
+
+    /**
      * Creates a new Statuses model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
      */
     public function actionCreate()
     {
@@ -117,8 +137,9 @@ class StatusesController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      *
      * @param int $id
-     *
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -139,10 +160,11 @@ class StatusesController extends Controller
 
     /**
      * Create links to other units of Statuses model.
-     * 
-     * @param int $id
      *
+     * @param int $id
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
      */
     public function actionLinkCreate($id)
     {
@@ -184,10 +206,15 @@ class StatusesController extends Controller
 
     /**
      * Delete links to other units of Statuses model.
-     * 
-     * @param int $id
      *
+     * @param $status_from
+     * @param $status_to
+     * @param $right_id
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     * @internal param int $id
+     *
      */
     public function actionLinkDelete($status_from, $status_to, $right_id)
     {
@@ -200,63 +227,26 @@ class StatusesController extends Controller
         $modelLink = $this->findModelLink($status_from, $status_to, $right_id);
 
         $modelLink->deleteAll(
-            'status_from = '.$modelLink->status_from.' AND '.
-            'status_to = '.$modelLink->status_to.' AND '.
-            'right_id = '.$modelLink->right_id
+            'status_from = ' . $modelLink->status_from . ' AND ' .
+            'status_to = ' . $modelLink->status_to . ' AND ' .
+            'right_id = ' . $modelLink->right_id
         );
 
         return $this->redirect(['view', 'id' => $status_from]);
     }
 
     /**
-     * Deletes an existing Statuses model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
-     * @param int $id
-     *
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $model = $this->findModel($id);
-
-        if (!$model->isAllowed('statuses.statuses.delete')) {
-            throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
-        }
-
-        $model->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Statuses model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     *
-     * @param int $id
-     *
-     * @return Statuses the loaded model
-     *
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Statuses::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException(Yii::t('statuses', 'The requested page does not exist.'));
-        }
-    }
-
-    /**
      * Finds the StatusesLinks model based on keys 'status_from', 'status_to' and 'right_id'.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param int $id
-     *
+     * @param $status_from
+     * @param $status_to
+     * @param $right_id
      * @return StatusesLinks the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
+     * @internal param int $id
+     *
      */
     protected function findModelLink($status_from, $status_to, $right_id)
     {
@@ -269,5 +259,28 @@ class StatusesController extends Controller
         } else {
             throw new NotFoundHttpException(Yii::t('statuses', 'The requested page does not exist.'));
         }
+    }
+
+    /**
+     * Deletes an existing Statuses model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
+     * @param int $id
+     * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     */
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+
+        if (!$model->isAllowed('statuses.statuses.delete')) {
+            throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
+        }
+
+        $model->delete();
+
+        return $this->redirect(['index']);
     }
 }
