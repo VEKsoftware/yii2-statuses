@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php echo $form->field($model, 'doc_type')->dropDownList( $model->docTypeLabels() ); ?>
+    <?php echo $form->field($model, 'doc_type')->dropDownList($model->docTypeLabels()); ?>
     
     <?php echo $form->field($model, 'symbolic_id')->textInput(['maxlength' => true]); ?>
     

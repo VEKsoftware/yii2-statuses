@@ -2,10 +2,8 @@
 
 namespace statuses\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use statuses\models\StatusesDoctypes;
 
 /**
  * StatusesDoctypesSearch represents the model behind the search form about `statuses\models\StatusesDoctypes`.
@@ -13,7 +11,7 @@ use statuses\models\StatusesDoctypes;
 class StatusesDoctypesSearch extends StatusesDoctypes
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -24,7 +22,7 @@ class StatusesDoctypesSearch extends StatusesDoctypes
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -33,7 +31,7 @@ class StatusesDoctypesSearch extends StatusesDoctypes
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *

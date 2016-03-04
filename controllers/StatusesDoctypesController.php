@@ -3,13 +3,10 @@
 namespace statuses\controllers;
 
 use Yii;
-
 use statuses\models\StatusesDoctypes;
 use statuses\models\StatusesDoctypesSearch;
-
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
@@ -43,16 +40,17 @@ class StatusesDoctypesController extends Controller
 
     /**
      * Lists all StatusesDoctypes models.
+     *
      * @return mixed
      */
     public function actionIndex()
     {
         $searchModel = new StatusesDoctypesSearch();
-        
-        if( !$searchModel->isAllowed('statuses.doctypes.index')) {
-            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+
+        if (!$searchModel->isAllowed('statuses.doctypes.index')) {
+            throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
-        
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -63,17 +61,19 @@ class StatusesDoctypesController extends Controller
 
     /**
      * Displays a single StatusesDoctypes model.
-     * @param integer $id
+     *
+     * @param int $id
+     *
      * @return mixed
      */
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        
-        if( !$model->isAllowed('statuses.doctypes.view')) {
-            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+
+        if (!$model->isAllowed('statuses.doctypes.view')) {
+            throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
-        
+
         return $this->render('view', [
             'model' => $model,
         ]);
@@ -82,16 +82,17 @@ class StatusesDoctypesController extends Controller
     /**
      * Creates a new StatusesDoctypes model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     *
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new StatusesDoctypes();
-        
-        if( !$model->isAllowed('statuses.doctypes.create')) {
-            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+
+        if (!$model->isAllowed('statuses.doctypes.create')) {
+            throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -104,17 +105,19 @@ class StatusesDoctypesController extends Controller
     /**
      * Updates an existing StatusesDoctypes model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     *
+     * @param int $id
+     *
      * @return mixed
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
-        if( !$model->isAllowed('statuses.doctypes.update')) {
-            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+
+        if (!$model->isAllowed('statuses.doctypes.update')) {
+            throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -127,17 +130,19 @@ class StatusesDoctypesController extends Controller
     /**
      * Deletes an existing StatusesDoctypes model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     *
+     * @param int $id
+     *
      * @return mixed
      */
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        
-        if( !$model->isAllowed('statuses.doctypes.delete')) {
-            throw new ForbiddenHttpException(Yii::t('statuses','Access restricted'));
+
+        if (!$model->isAllowed('statuses.doctypes.delete')) {
+            throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
-        
+
         $model->delete();
 
         return $this->redirect(['index']);
@@ -146,8 +151,11 @@ class StatusesDoctypesController extends Controller
     /**
      * Finds the StatusesDoctypes model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     *
+     * @param int $id
+     *
      * @return StatusesDoctypes the loaded model
+     *
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

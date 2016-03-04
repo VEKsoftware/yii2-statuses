@@ -2,11 +2,8 @@
 
 namespace statuses\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-
-use statuses\models\Statuses;
 
 /**
  * StatusesSearch represents the model behind the search form about `statuses\models\Statuses`.
@@ -14,18 +11,18 @@ use statuses\models\Statuses;
 class StatusesSearch extends Statuses
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['id', 'doc_type'], 'integer'],
-            [['name', 'description','symbolic_id'], 'string'],
+            [['name', 'description', 'symbolic_id'], 'string'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -34,7 +31,7 @@ class StatusesSearch extends Statuses
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -49,7 +46,9 @@ class StatusesSearch extends Statuses
         ]);
 
         $this->load($params);
-        if ( !$this->validate() ) return $dataProvider;
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
 
         $query->andFilterWhere([
             'id' => $this->id,
@@ -58,31 +57,34 @@ class StatusesSearch extends Statuses
 
         $query->andFilterWhere(['like', 'name', $this->name])
         ->andFilterWhere(['like', 'symbolic_id', $this->symbolic_id]);
+
         return $dataProvider;
     }
-    
+
     /**
      * 
      */
-    public function searchUnlink( $model, $params ) {
-        
+    public function searchUnlink($model, $params)
+    {
         $query = Statuses::find()
             ->where([
                 'and',
-                [ 'not', ['id' => $model->id] ],
-                [ 'doc_type' => $model->doc_type ],
+                ['not', ['id' => $model->id]],
+                ['doc_type' => $model->doc_type],
             ]);
-        
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         $this->load($params);
-        if ( !$this->validate() ) return $dataProvider;
-        
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
         $query->andFilterWhere(['like', 'name', $this->name])
         ->andFilterWhere(['like', 'symbolic_id', $this->symbolic_id]);
+
         return $dataProvider;
-        
     }
 }

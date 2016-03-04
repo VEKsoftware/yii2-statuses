@@ -27,10 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'doc_type',
                 'filter' => $searchModel->docTypeLabels(),
-                'value' => function( $model, $key ) {
-                    
+                'value' => function ($model, $key) {
+
                     return $model->docTypeName;
-                    
+
                 },
             ],
             'symbolic_id',
@@ -39,8 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => '',
                 'format' => 'raw',
-                'value' => function( $model, $key ) {
-                    return Html::a( Yii::t('statuses', 'View Statuses'), ['view', 'id' => $key ] );
+                'value' => function ($model, $key) {
+                    return Html::a(Yii::t('statuses', 'View Statuses'), ['view', 'id' => $key]);
                 },
             ],
         ],
