@@ -4,13 +4,12 @@ namespace statuses;
 
 use yii\base\ErrorException;
 use yii\base\Module;
-use yii\base\UnknownPropertyException;
 use yii\db\Connection;
 
 /**
  * Main class for Statuses module.
  *
- * @prop string|array signedUp The route to go after successful login
+ * @property string|array signedUp The route to go after successful login
  * @property mixed symbolic_id
  * @property mixed name
  */
@@ -20,12 +19,6 @@ class Statuses extends Module
      * @inherit
      */
     public $controllerNamespace = 'statuses\controllers';
-
-    /**
-     * Current project ID.
-     */
-    public $project_id = 2;
-
     /**
      * @var null|Connection Database component to use in the module.
      */
@@ -36,11 +29,115 @@ class Statuses extends Module
      */
     public $accessClass;
 
-    /**
-     * Class for access rights from DB (and search rights).
-     */
-    public $accessRightsClass;
-    public $accessRightsSearchClass;
+    /** @var array $allScenarios Массив настроек для настроек прав доступа по ролям */
+    public static $allScenarios = [
+        'label' => 'Модуль статусов',
+        'items' => [
+            'statuses.statuses.create' => [
+                'value' => 'statuses.statuses.create',
+                'label' => 'Создавать статусы',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+            'statuses.statuses.view' => [
+                'value' => 'statuses.statuses.view',
+                'label' => 'Просматривать статусы',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+            'statuses.statuses.update' => [
+                'value' => 'statuses.statuses.update',
+                'label' => 'Редактировать статусы',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+            'statuses.statuses.delete' => [
+                'value' => 'statuses.statuses.delete',
+                'label' => 'Удалять статусы',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+
+
+            'statuses.doctypes.create' => [
+                'value' => 'statuses.doctypes.create',
+                'label' => 'Создавать doctypes',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+            'statuses.doctypes.view' => [
+                'value' => 'statuses.doctypes.view',
+                'label' => 'Просматривать doctypes',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+            'statuses.doctypes.update' => [
+                'value' => 'statuses.doctypes.update',
+                'label' => 'Редактировать doctypes',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+            'statuses.doctypes.delete' => [
+                'value' => 'statuses.doctypes.delete',
+                'label' => 'Удалять doctypes',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+
+            'statuses.statuses.link.create' => [
+                'value' => 'statuses.statuses.link.create',
+                'label' => 'Создавать ?ссылку? статусы',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+            'statuses.statuses.link.delete' => [
+                'value' => 'statuses.statuses.link.delete',
+                'label' => 'Удалять ?ссылку? статусы',
+                'items' => [
+                    [
+                        'value' => 'any',
+                        'label' => 'Все',
+                    ],
+                ],
+            ],
+        ],
+    ];
 
     /**
      * @inherit
@@ -48,63 +145,33 @@ class Statuses extends Module
     public function init()
     {
         parent::init();
-
-        $this->checkAccessClassConfig();
-        $this->checkAccessRightsClassConfig();
-
+        //$this->checkAccessClassConfig();
         $this->registerTranslations();
     }
 
     /**
+     * @inherit
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => self::getInstance()->accessClass,
+            ],
+        ];
+    }
+    /**
      *
      */
-    protected function checkAccessClassConfig()
+    /*protected function checkAccessClassConfig()
     {
         $reflectionClass = new \ReflectionClass($this->accessClass);
 
         if ($reflectionClass->implementsInterface('\statuses\StatusesAccessInterface') == false) {
             throw new ErrorException('Statuses::accessClass must implement StatusesAccessInterface.');
         }
-    }
+    }*/
 
-    /**
-     *
-     */
-    protected function checkAccessRightsClassConfig()
-    {
-
-        // check property 'accessRightsClass'
-
-        $rightsClass = $this->accessRightsClass;
-        $rights = new $rightsClass();
-
-        if (!is_subclass_of($rights, '\yii\db\ActiveRecord', false)) {
-            throw new ErrorException('Statuses::accessRightsClass must be extended from class \yii\db\ActiveRecord.');
-        }
-
-        try {
-            $rights->id;
-            $rights->name;
-        } catch (UnknownPropertyException $e) {
-            throw new ErrorException('Statuses::accessRightsClass must have properties: id, name.');
-        }
-
-        // check property 'accessRightsSearchClass'
-
-        $rightsSearchClass = $this->accessRightsSearchClass;
-        $rightsSearch = new $rightsSearchClass();
-
-        if (!is_subclass_of($rightsSearch, $this->accessRightsClass, false)) {
-            throw new ErrorException('Statuses::accessRightsSearchClass must be extended from class ' . $this->accessRightsClass . '.');
-        }
-
-        $reflectRightsSearch = new \ReflectionClass($this->accessRightsSearchClass);
-        if (!$reflectRightsSearch->hasMethod('search')) {
-            throw new ErrorException('Statuses::accessRightsSearchClass must have public method "search( array $params )".');
-        }
-
-        return true;
-    }
 
     /**
      * Initialization of the i18n translation module.

@@ -31,12 +31,10 @@ class StatusesController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    // allow authenticated users
                     [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    // everything else is denied
                 ],
             ],
         ];
@@ -51,7 +49,7 @@ class StatusesController extends Controller
     {
         $searchModel = new StatusesSearch();
 
-        if (!$searchModel->isAllowed('statuses.statuses.index')) {
+        if (!$searchModel->isAccessed('statuses.statuses.view', null, 'Statuses')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -75,7 +73,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAllowed('statuses.statuses.view')) {
+        if (!$model->isAccessed('statuses.statuses.view', null, 'Statuses')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -119,7 +117,7 @@ class StatusesController extends Controller
     {
         $model = new Statuses();
 
-        if (!$model->isAllowed('statuses.statuses.create')) {
+        if (!$model->isAccessed('statuses.statuses.create', null, 'Statuses')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -145,7 +143,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAllowed('statuses.statuses.update')) {
+        if (!$model->isAccessed('statuses.statuses.update', null, 'Statuses')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -170,7 +168,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAllowed('statuses.statuses.link.create')) {
+        if (!$model->isAccessed('statuses.statuses.link.create', null, 'Statuses')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -187,9 +185,9 @@ class StatusesController extends Controller
         $searchModel = new StatusesSearch();
         $dataProviderModel = $searchModel->searchUnlink($model, Yii::$app->request->queryParams);
 
-        $rightsSearchClass = \statuses\Statuses::getInstance()->accessRightsSearchClass;
-        $rightsSearchModel = new $rightsSearchClass();
-        $rightsDataProvider = $rightsSearchModel->search(Yii::$app->request->queryParams);
+        //$rightsSearchClass = \statuses\Statuses::getInstance()->accessRightsSearchClass;
+        //$rightsSearchModel = new $rightsSearchClass();
+        //$rightsDataProvider = $rightsSearchModel->search(Yii::$app->request->queryParams);
 
         return $this->render(
             'link-create', [
@@ -199,8 +197,8 @@ class StatusesController extends Controller
             'searchModel' => $searchModel,
             'dataProviderModel' => $dataProviderModel,
 
-            'rightsSearchModel' => $rightsSearchModel,
-            'rightsDataProvider' => $rightsDataProvider,
+            //'rightsSearchModel' => $rightsSearchModel,
+            //'rightsDataProvider' => $rightsDataProvider,
         ]);
     }
 
@@ -220,7 +218,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($status_from);
 
-        if (!$model->isAllowed('statuses.statuses.link.delete')) {
+        if (!$model->isAccessed('statuses.statuses.link.delete', null, 'Statuses')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -275,7 +273,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAllowed('statuses.statuses.delete')) {
+        if (!$model->isAccessed('statuses.statuses.delete', null, 'Statuses')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 

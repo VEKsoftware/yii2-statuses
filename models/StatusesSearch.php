@@ -10,6 +10,7 @@ use yii\data\ActiveDataProvider;
  */
 class StatusesSearch extends Statuses
 {
+
     /**
      * {@inheritdoc}
      */
@@ -56,15 +57,13 @@ class StatusesSearch extends Statuses
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'symbolic_id', $this->symbolic_id]);
+        ->andFilterWhere(['like', 'symbolic_id', $this->symbolic_id]);
 
         return $dataProvider;
     }
 
     /**
-     * @param $model
-     * @param $params
-     * @return ActiveDataProvider
+     *
      */
     public function searchUnlink($model, $params)
     {
@@ -85,7 +84,7 @@ class StatusesSearch extends Statuses
         }
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'symbolic_id', $this->symbolic_id]);
+        ->andFilterWhere(['like', 'symbolic_id', $this->symbolic_id]);
 
         return $dataProvider;
     }

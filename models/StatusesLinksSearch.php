@@ -20,8 +20,8 @@ class StatusesLinksSearch extends StatusesLinks
     public function rules()
     {
         return [
-            [['status_from', 'status_to', 'right_id'], 'integer'],
-            [['statusName', 'rightName'], 'string'],
+            [['status_from', 'status_to'], 'integer'],
+            [['statusName', 'rightName', 'right_tag'], 'string'],
         ];
     }
 
@@ -68,11 +68,11 @@ class StatusesLinksSearch extends StatusesLinks
                     '"statuses"."name" LIKE ' . "'%" . $this->statusName . "%'",
                     '"statuses"."symbolic_id" LIKE ' . "'%" . $this->statusName . "%'",
                 ]);
-            }])
-            ->joinWith(['right' => function ($query) {
-                /** @var ActiveQuery $query */
-                $query->where('"ref_rights"."name" LIKE ' . "'%" . $this->rightName . "%'");
             }]);
+//            ->joinWith(['right' => function ($query) {
+//                /** @var ActiveQuery $query */
+//                $query->where('"ref_rights"."name" LIKE ' . "'%" . $this->rightName . "%'");
+//            }]);
 
         $dataProvider->setSort([
             'attributes' => [

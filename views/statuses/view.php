@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Url::toRoute(['statuses/link-delete',
                         'status_from' => $model->status_from,
                         'status_to' => $model->status_to,
-                        'right_id' => $model->right_id,
+//                        'right_id' => $model->right_id,
                     ]);
                 },
             ],

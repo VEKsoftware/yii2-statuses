@@ -3,7 +3,6 @@
 namespace statuses\models;
 
 use statuses\components\CommonRecord;
-use statuses\Statuses;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -94,7 +93,7 @@ class StatusesDoctypes extends CommonRecord
     {
         return [
             'access' => [
-                'class' => Statuses::getInstance()->accessClass,
+                'class' => \statuses\Statuses::getInstance()->accessClass,
 //                'relation'=>[$this,'getUserRelationName'],
             ],
         ];
@@ -105,6 +104,6 @@ class StatusesDoctypes extends CommonRecord
      */
     public function getStatuses()
     {
-        return $this->hasMany(Statuses::className(), ['doc_type' => 'id'])->indexBy('symbolic_id');
+        return $this->hasMany(\statuses\models\Statuses::className(), ['doc_type' => 'id'])->indexBy('symbolic_id');
     }
 }

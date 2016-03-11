@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ])->textInput(['style' => 'display: none;']); ?>
         </div>
         <div class="col-xs-5">
-            <?php echo $form->field($modelLink, 'right_id', [
+            <?php echo $form->field($modelLink, 'right_tag', [
                 'labelOptions' => ['style' => 'font-size: 150%;'],
             ])->textInput(['style' => 'display: none;']); ?>
         </div>
@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-xs-5">
             
-            <?= GridView::widget([
+            <!-- ?= GridView::widget([
                 'dataProvider' => $rightsDataProvider,
                 'filterModel' => $rightsSearchModel,
                 'columns' => [
@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'name',
                     ],
                 ],
-            ]); ?>
+            ]); ?!-->
     
         </div>
     </div>

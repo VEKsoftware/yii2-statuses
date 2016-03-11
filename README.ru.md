@@ -19,16 +19,20 @@ php composer.phar require --prefer-dist VEKsoftware/yii2-statuses "*"
 
 
 Не забудьте добавить модуль в конфигурацию вашего проекта.
+Пример конфигурации:
 ```
 'statuses' => [
     'class' => 'statuses\Statuses',
-    'db' => 'db_common',
-    'accessClass' => 'common\behaviors\Access',
+    'db' => 'db',
+    'accessClass' => 'app\behaviors\Access',
     'accessRightsClass' => 'partneruser\models\RefRights',
     'accessRightsSearchClass' => 'partneruser\models\RefRightsSearch',
 ],
 ```
-
+db - Название соединения с базой данных.
+accessClass - Должен имплементировать `statuses\StatusesAccessInterface`
+accessRightsClass - 
+accessRightsSearchClass
 
 Использование
 ------------------------------------------------------------

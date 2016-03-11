@@ -33,6 +33,18 @@ class Statuses extends CommonRecord
     }
 
     /**
+     * @inherit
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \statuses\Statuses::getInstance()->accessClass,
+            ],
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function findByTag($symbolicId)
@@ -162,19 +174,6 @@ class Statuses extends CommonRecord
             'name' => Yii::t('statuses', 'Statuses Name'),
             'description' => Yii::t('statuses', 'Statuses Description'),
             'symbolic_id' => Yii::t('statuses', 'Statuses Symbolic Id'),
-        ];
-    }
-
-    /**
-     * @inherit
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => \statuses\Statuses::getInstance()->accessClass,
-//                'relation'=>[$this,'getUserRelationName'],
-            ],
         ];
     }
 

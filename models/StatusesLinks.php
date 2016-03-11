@@ -3,7 +3,6 @@
 namespace statuses\models;
 
 use statuses\components\CommonRecord;
-use statuses\Statuses;
 use Yii;
 
 /**
@@ -11,7 +10,7 @@ use Yii;
  *
  * @property int $status_from
  * @property int $status_to
- * @property int $right_id
+ * @property string $right_tag
  * @property mixed $right
  * @property Statuses $statusFrom
  * @property Statuses $statusTo
@@ -31,7 +30,7 @@ class StatusesLinks extends CommonRecord
      */
     public static function primaryKey()
     {
-        return ['status_from', 'status_to', 'right_id'];
+        return ['status_from', 'status_to', 'right_tag'];
     }
 
     /**
@@ -40,10 +39,10 @@ class StatusesLinks extends CommonRecord
     public function rules()
     {
         return [
-            [['status_from', 'status_to', 'right_id'], 'required'],
-            [['status_from', 'status_to', 'right_id'], 'integer'],
-
-            [['status_from', 'status_to', 'right_id'], 'validateExists'],
+            [['status_from', 'status_to', 'right_tag'], 'required'],
+            [['status_from', 'status_to'], 'integer'],
+            [['right_tag'], 'string'],
+            [['status_from', 'status_to', 'right_tag'], 'validateExists'],
         ];
     }
 
@@ -56,7 +55,7 @@ class StatusesLinks extends CommonRecord
             ->where([
                 'status_from' => $this->status_from,
                 'status_to' => $this->status_to,
-                'right_id' => $this->right_id,
+                'right_tag' => $this->right_tag,
             ])
             ->one();
 
@@ -73,7 +72,7 @@ class StatusesLinks extends CommonRecord
         return [
             'status_from' => Yii::t('statuses', 'Statuses Links Status From'),
             'status_to' => Yii::t('statuses', 'Statuses Links Status To'),
-            'right_id' => Yii::t('statuses', 'Statuses Links Right ID'),
+            'right_tag' => Yii::t('statuses', 'Statuses Links Right ID'),
 
             'statusName' => Yii::t('statuses', 'Statuses Links Status To'),
             'rightName' => Yii::t('statuses', 'Statuses Links Right ID'),
@@ -89,7 +88,7 @@ class StatusesLinks extends CommonRecord
     {
         return [
             'access' => [
-                'class' => Statuses::getInstance()->accessClass,
+                'class' => \statuses\Statuses::getInstance()->accessClass,
             ],
         ];
     }
@@ -97,12 +96,13 @@ class StatusesLinks extends CommonRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRight()
-    {
-        /** @var Statuses $class */
-        $class = Statuses::getInstance()->accessRightsClass;
-        return $this->hasOne($class::className(), ['id' => 'right_id']);
-    }
+//    public function getRight()
+//    {
+//        return $this->right_tag;
+//        /** @var Statuses $class */
+////        $class = \statuses\Statuses::getInstance()->accessRightClass;
+////        return $this->hasOne($class::className(), ['id' => 'right_tag']);
+//    }
 
     /**
      * @return \yii\db\ActiveQuery
