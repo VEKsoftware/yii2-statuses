@@ -8,10 +8,6 @@ use yii\db\Connection;
 
 /**
  * Main class for Statuses module.
- *
- * @property string|array signedUp The route to go after successful login
- * @property mixed symbolic_id
- * @property mixed name
  */
 class Statuses extends Module
 {
@@ -19,10 +15,6 @@ class Statuses extends Module
      * @inherit
      */
     public $controllerNamespace = 'statuses\controllers';
-    /**
-     * @var null|Connection Database component to use in the module.
-     */
-    public $db;
 
     /**
      * Class for access methods, implements StatusesAccessInterface.
@@ -145,7 +137,7 @@ class Statuses extends Module
     public function init()
     {
         parent::init();
-        //$this->checkAccessClassConfig();
+        $this->checkAccessClassConfig();
         $this->registerTranslations();
     }
 
@@ -160,17 +152,17 @@ class Statuses extends Module
             ],
         ];
     }
+
     /**
      *
      */
-    /*protected function checkAccessClassConfig()
+    protected function checkAccessClassConfig()
     {
         $reflectionClass = new \ReflectionClass($this->accessClass);
-
-        if ($reflectionClass->implementsInterface('\statuses\StatusesAccessInterface') == false) {
-            throw new ErrorException('Statuses::accessClass must implement StatusesAccessInterface.');
+        if ($reflectionClass->implementsInterface('\statuses\StatusesAccessInterface') === false) {
+            throw new ErrorException('\statuses\Statuses::$accessClass must implement \statuses\StatusesAccessInterface.');
         }
-    }*/
+    }
 
 
     /**
@@ -182,11 +174,9 @@ class Statuses extends Module
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en',
             'basePath' => '@statuses/messages',
-
             'fileMap' => [
                 'statuses' => 'statuses.php',
             ],
-
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace statuses\models;
 use statuses\components\CommonRecord;
 use Yii;
 use yii\db\ActiveQueryInterface;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -20,7 +21,7 @@ use yii\helpers\ArrayHelper;
  * @property mixed symbolic_id
  * @property mixed fullName
  */
-class Statuses extends CommonRecord
+class Statuses extends ActiveRecord
 {
     private static $_statuses;
 

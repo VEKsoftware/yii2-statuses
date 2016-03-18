@@ -4,6 +4,7 @@ namespace statuses\models;
 
 use statuses\components\CommonRecord;
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "statuses_links".
@@ -15,7 +16,7 @@ use Yii;
  * @property Statuses $statusFrom
  * @property Statuses $statusTo
  */
-class StatusesLinks extends CommonRecord
+class StatusesLinks extends ActiveRecord
 {
     /**
      * {@inheritdoc}
