@@ -4,7 +4,6 @@ namespace statuses;
 
 use yii\base\ErrorException;
 use yii\base\Module;
-use yii\db\Connection;
 
 /**
  * Main class for Statuses module.
@@ -16,9 +15,10 @@ class Statuses extends Module
      */
     public $controllerNamespace = 'statuses\controllers';
 
-    /**
-     * Class for access methods, implements StatusesAccessInterface.
-     */
+    /** @var string $db Database component to use in the module */
+    public $db;
+
+    /** @var StatusesAccessInterface $accessClass Class for access methods, implements StatusesAccessInterface */
     public $accessClass;
 
     /** @var array $allScenarios Массив настроек для настроек прав доступа по ролям */
@@ -153,9 +153,6 @@ class Statuses extends Module
         ];
     }
 
-    /**
-     *
-     */
     protected function checkAccessClassConfig()
     {
         $reflectionClass = new \ReflectionClass($this->accessClass);
@@ -163,7 +160,6 @@ class Statuses extends Module
             throw new ErrorException('\statuses\Statuses::$accessClass must implement \statuses\StatusesAccessInterface.');
         }
     }
-
 
     /**
      * Initialization of the i18n translation module.

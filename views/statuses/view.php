@@ -17,20 +17,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <div class="row">
-            <div class="col-xs-6">
-                <?= Html::a(Yii::t('statuses', 'Update Statuses'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            </div>
-            <div class="col-xs-6 text-right">
-                <?= Html::a(Yii::t('statuses', 'Delete'), ['delete', 'id' => $model->id], [
-                    'class' => 'btn btn-danger',
-                    'data' => [
-                        'confirm' => Yii::t('statuses', 'Are you sure you want to delete this item?'),
-                        'method' => 'post',
-                    ],
-                ]) ?>
-            </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <?= Html::a(Yii::t('statuses', 'Update Statuses'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
+        <div class="col-xs-6 text-right">
+            <?= Html::a(Yii::t('statuses', 'Delete'), ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => Yii::t('statuses', 'Are you sure you want to delete this item?'),
+                    'method' => 'post',
+                ],
+            ]) ?>
+        </div>
+    </div>
     </p>
 
     <?= DetailView::widget([
@@ -61,14 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            [
-                'attribute' => 'statusName',
-            ],
-            [
-                'attribute' => 'rightName',
-            ],
-
+            'statusName',
+            'right_tag',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
@@ -88,10 +82,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
+                    /** @var \statuses\models\StatusesLinks $model */
                     return Url::toRoute(['statuses/link-delete',
                         'status_from' => $model->status_from,
                         'status_to' => $model->status_to,
-//                        'right_id' => $model->right_id,
+                        'right_tag' => $model->right_tag,
                     ]);
                 },
             ],

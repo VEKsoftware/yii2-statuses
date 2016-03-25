@@ -63,7 +63,9 @@ class StatusesSearch extends Statuses
     }
 
     /**
-     *
+     * @param $model
+     * @param $params
+     * @return ActiveDataProvider
      */
     public function searchUnlink($model, $params)
     {

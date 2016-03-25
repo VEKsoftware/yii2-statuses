@@ -4,7 +4,6 @@ namespace statuses\models;
 
 use statuses\components\CommonRecord;
 use Yii;
-use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -15,7 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property string $symbolic_id
  * @property Statuses[] $statuses
  */
-class StatusesDoctypes extends ActiveRecord
+class StatusesDoctypes extends CommonRecord
 {
     /**
      * {@inheritdoc}
@@ -95,7 +94,6 @@ class StatusesDoctypes extends ActiveRecord
         return [
             'access' => [
                 'class' => \statuses\Statuses::getInstance()->accessClass,
-//                'relation'=>[$this,'getUserRelationName'],
             ],
         ];
     }

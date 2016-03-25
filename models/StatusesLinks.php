@@ -4,7 +4,6 @@ namespace statuses\models;
 
 use statuses\components\CommonRecord;
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "statuses_links".
@@ -12,11 +11,10 @@ use yii\db\ActiveRecord;
  * @property int $status_from
  * @property int $status_to
  * @property string $right_tag
- * @property mixed $right
  * @property Statuses $statusFrom
  * @property Statuses $statusTo
  */
-class StatusesLinks extends ActiveRecord
+class StatusesLinks extends CommonRecord
 {
     /**
      * {@inheritdoc}
@@ -43,7 +41,9 @@ class StatusesLinks extends ActiveRecord
             [['status_from', 'status_to', 'right_tag'], 'required'],
             [['status_from', 'status_to'], 'integer'],
             [['right_tag'], 'string'],
+            ['right_tag', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.]+$/'],
             [['status_from', 'status_to', 'right_tag'], 'validateExists'],
+            ['right_tag', 'unique',],
         ];
     }
 
@@ -73,7 +73,7 @@ class StatusesLinks extends ActiveRecord
         return [
             'status_from' => Yii::t('statuses', 'Statuses Links Status From'),
             'status_to' => Yii::t('statuses', 'Statuses Links Status To'),
-            'right_tag' => Yii::t('statuses', 'Statuses Links Right ID'),
+            'right_tag' => Yii::t('statuses', 'Statuses Links Right'),
 
             'statusName' => Yii::t('statuses', 'Statuses Links Status To'),
             'rightName' => Yii::t('statuses', 'Statuses Links Right ID'),
@@ -97,17 +97,6 @@ class StatusesLinks extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-//    public function getRight()
-//    {
-//        return $this->right_tag;
-//        /** @var Statuses $class */
-////        $class = \statuses\Statuses::getInstance()->accessRightClass;
-////        return $this->hasOne($class::className(), ['id' => 'right_tag']);
-//    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getStatusFrom()
     {
         return $this->hasOne(Statuses::className(), ['id' => 'status_from']);
@@ -127,13 +116,5 @@ class StatusesLinks extends ActiveRecord
     public function getStatusName()
     {
         return $this->statusTo->symbolic_id . ' - ' . $this->statusTo->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRightName()
-    {
-        return $this->right->name;
     }
 }

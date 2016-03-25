@@ -5,7 +5,6 @@ namespace statuses\models;
 use statuses\components\CommonRecord;
 use Yii;
 use yii\db\ActiveQueryInterface;
-use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -17,11 +16,11 @@ use yii\helpers\ArrayHelper;
  * @property string $description
  * @property StatusesLinks[] $statusesLinks
  * @property StatusesLinks[] $statusesLinks0
- * @property mixed docTypeName
- * @property mixed symbolic_id
- * @property mixed fullName
+ * @property string docTypeName
+ * @property string symbolic_id
+ * @property string fullName
  */
-class Statuses extends ActiveRecord
+class Statuses extends CommonRecord
 {
     private static $_statuses;
 
@@ -160,7 +159,8 @@ class Statuses extends ActiveRecord
             [['description'], 'string'],
             [['name'], 'string', 'max' => 200],
             [['symbolic_id'], 'string'],
-            [['doc_type', 'symbolic_id'], 'unique', 'targetAttribute' => ['doc_type', 'symbolic_id']],
+            ['symbolic_id', 'unique',],
+            ['symbolic_id', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.]+$/'],
         ];
     }
 
@@ -210,12 +210,12 @@ class Statuses extends ActiveRecord
         return StatusesDoctypes::createDropdown();
     }
 
-    public function getAvailableStatuses($rightIds = null) //($doc, $rightId)
+    public function getAvailableStatuses($rightIds = null)
     {
         return $this->hasMany(self::className(), ['id' => 'status_to'])
             ->via('statusesLinksFrom', function ($q) use ($rightIds) {
                 /** @var ActiveQueryInterface $q */
-                $q->andFilterWhere(['right_id' => $rightIds]);
+                $q->andFilterWhere(['right_tag' => $rightIds]);
             });
     }
 

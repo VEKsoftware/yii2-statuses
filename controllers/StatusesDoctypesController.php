@@ -48,7 +48,7 @@ class StatusesDoctypesController extends Controller
     {
         $searchModel = new StatusesDoctypesSearch();
 
-        if (!$searchModel->isAccessed('statuses.doctypes.view', null, 'Statuses')) {
+        if (!$searchModel->isAllowed('statuses.doctypes.view')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -72,7 +72,7 @@ class StatusesDoctypesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAccessed('statuses.doctypes.view', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.doctypes.view')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -110,7 +110,7 @@ class StatusesDoctypesController extends Controller
     {
         $model = new StatusesDoctypes();
 
-        if (!$model->isAccessed('statuses.doctypes.create', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.doctypes.create')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -136,7 +136,7 @@ class StatusesDoctypesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAccessed('statuses.doctypes.update', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.doctypes.update')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -163,7 +163,7 @@ class StatusesDoctypesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAccessed('statuses.doctypes.delete', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.doctypes.delete')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 

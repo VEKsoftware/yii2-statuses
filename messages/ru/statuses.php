@@ -48,4 +48,6 @@ return [
 
     'Statuses Doctypes Name' => 'Наименование типа документа',
     'Statuses Doctypes Symbolic ID' => 'Уникальный символьный ID',
+
+    'Allowed symbols: a-Z, dot, underscore, dash' => 'Разрешенные символы: a-Z, точка, нижнее подчеркивание, тире.',
 ];

@@ -57,8 +57,7 @@ class StatusesLinksSearch extends StatusesLinks
             return $dataProvider;
         }
 
-        // надо здесь создать условия для фильтрации элементов единиц StatusLink
-        // по именам связанных статусов и прав
+        /* TODO  надо здесь создать условия для фильтрации элементов единиц StatusLink по именам связанных статусов и прав */
         /** @var ActiveQuery $query */
         $query
             ->joinWith(['statusTo' => function ($query) {
@@ -85,12 +84,12 @@ class StatusesLinksSearch extends StatusesLinks
                     ],
                     'default' => SORT_ASC,
                 ],
-                'rightName' => [
+                'right_tag' => [
                     'asc' => [
-                        'ref_rights.name' => SORT_ASC,
+                        'right_tag' => SORT_ASC,
                     ],
                     'desc' => [
-                        'ref_rights.name' => SORT_DESC,
+                        'right_tag' => SORT_DESC,
                     ],
                     'default' => SORT_ASC,
                 ],

@@ -48,8 +48,7 @@ class StatusesController extends Controller
     public function actionIndex()
     {
         $searchModel = new StatusesSearch();
-
-        if (!$searchModel->isAccessed('statuses.statuses.view', null, 'Statuses')) {
+        if (!$searchModel->isAllowed('statuses.statuses.view')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -73,7 +72,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAccessed('statuses.statuses.view', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.statuses.view')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -117,7 +116,7 @@ class StatusesController extends Controller
     {
         $model = new Statuses();
 
-        if (!$model->isAccessed('statuses.statuses.create', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.statuses.create')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -143,7 +142,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAccessed('statuses.statuses.update', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.statuses.update')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -168,7 +167,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAccessed('statuses.statuses.link.create', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.statuses.link.create')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
@@ -185,10 +184,6 @@ class StatusesController extends Controller
         $searchModel = new StatusesSearch();
         $dataProviderModel = $searchModel->searchUnlink($model, Yii::$app->request->queryParams);
 
-        //$rightsSearchClass = \statuses\Statuses::getInstance()->accessRightsSearchClass;
-        //$rightsSearchModel = new $rightsSearchClass();
-        //$rightsDataProvider = $rightsSearchModel->search(Yii::$app->request->queryParams);
-
         return $this->render(
             'link-create', [
             'model' => $model,
@@ -196,9 +191,6 @@ class StatusesController extends Controller
 
             'searchModel' => $searchModel,
             'dataProviderModel' => $dataProviderModel,
-
-            //'rightsSearchModel' => $rightsSearchModel,
-            //'rightsDataProvider' => $rightsDataProvider,
         ]);
     }
 
@@ -207,49 +199,50 @@ class StatusesController extends Controller
      *
      * @param $status_from
      * @param $status_to
-     * @param $right_id
+     * @param $right_tag
      * @return mixed
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      * @internal param int $id
      *
      */
-    public function actionLinkDelete($status_from, $status_to, $right_id)
+    public function actionLinkDelete($status_from, $status_to, $right_tag)
     {
         $model = $this->findModel($status_from);
 
-        if (!$model->isAccessed('statuses.statuses.link.delete', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.statuses.link.delete')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
-        $modelLink = $this->findModelLink($status_from, $status_to, $right_id);
+        $modelLink = $this->findModelLink($status_from, $status_to, $right_tag);
 
-        $modelLink->deleteAll(
-            'status_from = ' . $modelLink->status_from . ' AND ' .
-            'status_to = ' . $modelLink->status_to . ' AND ' .
-            'right_id = ' . $modelLink->right_id
-        );
+        $modelLink->deleteAll([
+            'and',
+            ['status_from' => $modelLink->status_from],
+            ['status_to' => $modelLink->status_to],
+            ['right_tag' => $modelLink->right_tag],
+        ]);
 
         return $this->redirect(['view', 'id' => $status_from]);
     }
 
     /**
-     * Finds the StatusesLinks model based on keys 'status_from', 'status_to' and 'right_id'.
+     * Finds the StatusesLinks model based on keys 'status_from', 'status_to' and 'right_tag'.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param $status_from
      * @param $status_to
-     * @param $right_id
+     * @param $right_tag
      * @return StatusesLinks the loaded model
      *
      * @throws NotFoundHttpException if the model cannot be found
      * @internal param int $id
      *
      */
-    protected function findModelLink($status_from, $status_to, $right_id)
+    protected function findModelLink($status_from, $status_to, $right_tag)
     {
         $model = StatusesLinks::find()
-            ->where(['status_from' => $status_from, 'status_to' => $status_to, 'right_id' => $right_id])
+            ->where(['status_from' => $status_from, 'status_to' => $status_to, 'right_tag' => $right_tag])
             ->one();
 
         if ($model !== null) {
@@ -273,7 +266,7 @@ class StatusesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (!$model->isAccessed('statuses.statuses.delete', null, 'Statuses')) {
+        if (!$model->isAllowed('statuses.statuses.delete')) {
             throw new ForbiddenHttpException(Yii::t('statuses', 'Access restricted'));
         }
 
