@@ -4,6 +4,7 @@ namespace statuses\models;
 
 use statuses\components\CommonRecord;
 use Yii;
+use yii\base\InvalidParamException;
 use yii\db\ActiveQueryInterface;
 use yii\helpers\ArrayHelper;
 
@@ -23,6 +24,29 @@ use yii\helpers\ArrayHelper;
 class Statuses extends CommonRecord
 {
     private static $_statuses;
+
+
+    /**
+     * Возвращает ID статуса для заданой категории документа и символьным алиасом статуса
+     * @param string $docTypeAlias Идентификатор типа документа
+     * @param string $statusAlias Идентификатор статуса
+     * @return null|integer
+     */
+    public static function id($docTypeAlias, $statusAlias)
+    {
+        $docType = StatusesDoctypes::findOne(['symbolic_id' => $docTypeAlias]);
+        if(isset($docType)) {
+            /** @var StatusesDoctypes $docType */
+            $list = ArrayHelper::index(static::listStatuses($docType->symbolic_id), 'symbolic_id');
+            if(isset($list[$statusAlias])) {
+                return $list[$statusAlias]->id;
+            } else {
+                throw new InvalidParamException('Status not found');
+            }
+        } else {
+            throw new InvalidParamException('DocType not found');
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -122,7 +146,7 @@ class Statuses extends CommonRecord
      * @param string $docType The symbolic tag of the document type
      * @param $rightId
      * @return \yii\db\ActiveQuery
-     * @internal param string|\string[] $symbolicId The symbolic tags of the rights
+     * @internal param string|string[] $symbolicId The symbolic tags of the rights
      *
      */
     public static function findAvailableStatuses($docType, $rightId)
@@ -135,17 +159,17 @@ class Statuses extends CommonRecord
     /**
      * Return an array of all statuses for the specific doc type.
      *
-     * @param string $docType The symbolic tag of the document type
+     * @param string $docTypeId The symbolic id of the document type
      *
      * @return static[]
      */
-    public static function listStatuses($docType)
+    public static function listStatuses($docTypeId)
     {
-        if (!isset(static::$_statuses[$docType])) {
-            static::$_statuses[$docType] = static::findStatuses($docType)->all();
+        if (!isset(static::$_statuses[$docTypeId])) {
+            static::$_statuses[$docTypeId] = static::findStatuses($docTypeId)->all();
         }
 
-        return static::$_statuses[$docType];
+        return static::$_statuses[$docTypeId];
     }
 
     /**
