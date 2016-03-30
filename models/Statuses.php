@@ -16,7 +16,7 @@ use yii\helpers\ArrayHelper;
  * @property string $name
  * @property string $description
  * @property StatusesLinks[] $statusesLinks
- * @property StatusesLinks[] $statusesLinks0
+ * @property StatusesLinks[] statusesLinksTo
  * @property string docTypeName
  * @property string symbolic_id
  * @property string fullName
@@ -75,26 +75,9 @@ class Statuses extends CommonRecord
         ];
     }
 
-    /**
-     * Возвращает ID статуса для заданой категории документа и символьным алиасом статуса
-     * @param string $docTypeAlias Идентификатор типа документа
-     * @param string $statusAlias Идентификатор статуса
-     * @return null|integer
-     */
-    public static function id($docTypeAlias, $statusAlias)
+    public static function findStatusBySymbolicId($statusAlias)
     {
-        $docType = StatusesDoctypes::findOne(['symbolic_id' => $docTypeAlias]);
-        if(isset($docType)) {
-            /** @var StatusesDoctypes $docType */
-            $list = ArrayHelper::index(static::listStatuses($docType->symbolic_id), 'symbolic_id');
-            if(isset($list[$statusAlias])) {
-                return $list[$statusAlias]->id;
-            } else {
-                throw new InvalidParamException('Status not found');
-            }
-        } else {
-            throw new InvalidParamException('DocType not found');
-        }
+        return static::findOne(['symbolic_id' => $statusAlias]);
     }
 
     public static function findByTag($symbolicId)

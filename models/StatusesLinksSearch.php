@@ -57,7 +57,7 @@ class StatusesLinksSearch extends StatusesLinks
             return $dataProvider;
         }
 
-        /* TODO  надо здесь создать условия для фильтрации элементов единиц StatusLink по именам связанных статусов и прав */
+        /* TODO  здесь нужно создать условия для фильтрации элементов единиц StatusLink по именам связанных статусов и прав */
         /** @var ActiveQuery $query */
         $query
             ->joinWith(['statusTo' => function ($query) {

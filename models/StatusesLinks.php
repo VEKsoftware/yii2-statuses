@@ -110,6 +110,11 @@ class StatusesLinks extends CommonRecord
         return $this->hasOne(Statuses::className(), ['id' => 'status_to']);
     }
 
+    public static function findLinksByFromIdAndToId($fromId, $toId)
+    {
+        return static::find()->where(['status_from' => $fromId])->andWhere(['status_to' => $toId])->all();
+    }
+
     /**
      * {@inheritdoc}
      */
