@@ -28,12 +28,10 @@ class StatusesDoctypesController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    // allow authenticated users
                     [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                    // everything else is denied
                 ],
             ],
         ];

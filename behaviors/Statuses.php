@@ -18,15 +18,41 @@ class Statuses extends Behavior
      * @var ActiveRecord the owner of this behavior
      */
     public $owner;
+    public $statusField;
 
-
+    /**
+     * Метод возвращает отношение связанного объекта статуса.
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getStatus()
     {
-
+        return $this->owner->hasOne(\statuses\models\Statuses::className(), ['id' => $this->statusField]);
     }
 
-    public function setStatus($value)
+    /**
+     * Сеттер для установки статуса, проверяет доступен ли назначаемый статус и устанавливает его.
+     *
+     * @param $value
+     * @param bool $safe
+     */
+    public function setStatus($value, $safe = false)
     {
+        if($safe) {
+
+        } else {
+
+        }
+
+        $status = $this->getStatus()->one();
+
+        if(isset($status)) {
+            /** @var \statuses\models\Statuses $status */
+            $status->get
+        }
+        var_dump($this->status->name);
+        exit();
+        $this->owner->{$this->statusField} = $value;
 
     }
 

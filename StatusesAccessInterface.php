@@ -23,7 +23,7 @@ interface StatusesAccessInterface
      * statuses.doctypes.update
      * statuses.doctypes.delete
      *
-     * /// Отношения статусов
+     * /// Модель StatusesLinks
      * statuses.link.create
      * statuses.link.delete
      *
