@@ -50,7 +50,9 @@ class StatusesDoctypes extends CommonRecord
     }
 
     /**
-     * create list [ $this->id => $this->name ].
+     * Create list [ $this->id => $this->name ]
+     *
+     * @return array
      */
     public static function createDropdown()
     {

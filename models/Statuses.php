@@ -25,29 +25,6 @@ class Statuses extends CommonRecord
 {
     private static $_statuses;
 
-
-    /**
-     * Возвращает ID статуса для заданой категории документа и символьным алиасом статуса
-     * @param string $docTypeAlias Идентификатор типа документа
-     * @param string $statusAlias Идентификатор статуса
-     * @return null|integer
-     */
-    public static function id($docTypeAlias, $statusAlias)
-    {
-        $docType = StatusesDoctypes::findOne(['symbolic_id' => $docTypeAlias]);
-        if(isset($docType)) {
-            /** @var StatusesDoctypes $docType */
-            $list = ArrayHelper::index(static::listStatuses($docType->symbolic_id), 'symbolic_id');
-            if(isset($list[$statusAlias])) {
-                return $list[$statusAlias]->id;
-            } else {
-                throw new InvalidParamException('Status not found');
-            }
-        } else {
-            throw new InvalidParamException('DocType not found');
-        }
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -71,6 +48,55 @@ class Statuses extends CommonRecord
     /**
      * {@inheritdoc}
      */
+    public function rules()
+    {
+        return [
+            [['doc_type', 'name', 'symbolic_id'], 'required'],
+            [['doc_type'], 'integer'],
+            [['description'], 'string'],
+            [['name'], 'string', 'max' => 200],
+            [['symbolic_id'], 'string'],
+            ['symbolic_id', 'unique',],
+            ['symbolic_id', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.]+$/'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('statuses', 'ID'),
+            'doc_type' => Yii::t('statuses', 'Statuses Doc Type'),
+            'name' => Yii::t('statuses', 'Statuses Name'),
+            'description' => Yii::t('statuses', 'Statuses Description'),
+            'symbolic_id' => Yii::t('statuses', 'Statuses Symbolic Id'),
+        ];
+    }
+
+    /**
+     * Возвращает ID статуса для заданой категории документа и символьным алиасом статуса
+     * @param string $docTypeAlias Идентификатор типа документа
+     * @param string $statusAlias Идентификатор статуса
+     * @return null|integer
+     */
+    public static function id($docTypeAlias, $statusAlias)
+    {
+        $docType = StatusesDoctypes::findOne(['symbolic_id' => $docTypeAlias]);
+        if(isset($docType)) {
+            /** @var StatusesDoctypes $docType */
+            $list = ArrayHelper::index(static::listStatuses($docType->symbolic_id), 'symbolic_id');
+            if(isset($list[$statusAlias])) {
+                return $list[$statusAlias]->id;
+            } else {
+                throw new InvalidParamException('Status not found');
+            }
+        } else {
+            throw new InvalidParamException('DocType not found');
+        }
+    }
+
     public static function findByTag($symbolicId)
     {
         if (is_array($symbolicId)) {
@@ -89,9 +115,6 @@ class Statuses extends CommonRecord
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function findByDocTypeTag($docType, $symbolicId)
     {
         $query = static::find()->joinWith('docType')->where(['{{statuses_doctypes}}.symbolic_id' => $docType]);
@@ -144,24 +167,23 @@ class Statuses extends CommonRecord
      * Find all statuses allowed by access rights.
      *
      * @param string $docType The symbolic tag of the document type
-     * @param $rightId
+     * @param string|array $rightTag Right tag
      * @return \yii\db\ActiveQuery
      * @internal param string|string[] $symbolicId The symbolic tags of the rights
      *
      */
-    public static function findAvailableStatuses($docType, $rightId)
+    public static function findAvailableStatuses($docType, $rightTag)
     {
         return static::findStatuses($docType)
             ->joinWith('statusesLinksTo')
-            ->andWhere(['[[statusesLinksTo.status_from]]' => $rightId]);
+            ->andWhere(['[[statusesLinksTo.right_tag]]' => $rightTag]);
     }
 
     /**
      * Return an array of all statuses for the specific doc type.
      *
      * @param string $docTypeId The symbolic id of the document type
-     *
-     * @return static[]
+     * @return Statuses[]
      */
     public static function listStatuses($docTypeId)
     {
@@ -173,36 +195,8 @@ class Statuses extends CommonRecord
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['doc_type', 'name', 'symbolic_id'], 'required'],
-            [['doc_type'], 'integer'],
-            [['description'], 'string'],
-            [['name'], 'string', 'max' => 200],
-            [['symbolic_id'], 'string'],
-            ['symbolic_id', 'unique',],
-            ['symbolic_id', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.]+$/'],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('statuses', 'ID'),
-            'doc_type' => Yii::t('statuses', 'Statuses Doc Type'),
-            'name' => Yii::t('statuses', 'Statuses Name'),
-            'description' => Yii::t('statuses', 'Statuses Description'),
-            'symbolic_id' => Yii::t('statuses', 'Statuses Symbolic Id'),
-        ];
-    }
-
-    /**
+     * Return relation to DocType
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getDocType()
@@ -211,7 +205,7 @@ class Statuses extends CommonRecord
     }
 
     /**
-     * @return string (doc_type label) || integer (doc_type) || null
+     * @return string|integer
      */
     public function getDocTypeName()
     {
