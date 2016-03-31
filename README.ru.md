@@ -1,7 +1,7 @@
 Yii2-Statuses
 ================================
 Yii2-Statuses - модуль предназначенный для управления статусами объектов.
-Модуль реализует функционал контроля доступа 
+Модуль реализует функционал контроля доступа смены статусов.
 
 Установка
 ------------------------------------------------------------
@@ -25,14 +25,25 @@ php composer.phar require --prefer-dist VEKsoftware/yii2-statuses "*"
     'class' => 'statuses\Statuses',
     'db' => 'db',
     'accessClass' => 'app\behaviors\Access',
-    'accessRightsClass' => 'partneruser\models\RefRights',
-    'accessRightsSearchClass' => 'partneruser\models\RefRightsSearch',
 ],
 ```
 db - Название соединения с базой данных.
-accessClass - Должен имплементировать `statuses\StatusesAccessInterface`
-accessRightsClass - 
-accessRightsSearchClass
+accessClass - Должен имплементировать `statuses\StatusesAccessInterface`, более подробное описание смотрите в комментариях файла `statuses\StatusesAccessInterface.php`
+
+
+
+Все необходимые для работы таблицы находятся в файле tables_dump_pg.
 
 Использование
 ------------------------------------------------------------
+Для того, чтобы полноценно использовать модуль, сначала задайте статусы и отношения через веб интерфейс.
+Далее сконфигурируйте поведение для ваших моделей, примерно таки образом:
+```
+'statuses' => [
+    'class' => \statuses\behaviors\Statuses::className(),
+    'statusIdField' => 'status_id', // Поле вашей модели, в котором хранится числовой идентификатор статуса
+],
+```
+Ваша модель должна иметь свойство docTypeSymbolicId, где хранится символьный идентификатор типа документа.
+Поведение имеет свойство status, которое при чтении возвращает объект типа statuses\models\Statuses, а при записи ожидает символьный идентификатор свойства, после этого проверяет права доступа, для этого ваша модель должна иметь метод isAccessed($rightTag), где rightTag это права доступа заданные в ссылке.
+Если же необходимо задать какой-либо статус без проверки прав доступа, используйте метод setStatusSafe($value), где $value символьное название статуса.
