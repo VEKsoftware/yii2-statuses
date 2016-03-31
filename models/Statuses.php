@@ -158,8 +158,8 @@ class Statuses extends CommonRecord
     public static function findAvailableStatuses($docType, $rightTag)
     {
         return static::findStatuses($docType)
-            ->joinWith('statusesLinksTo')
-            ->andWhere(['[[statusesLinksTo.right_tag]]' => $rightTag]);
+            ->joinWith('linksTo')
+            ->andWhere(['[[linksTo.right_tag]]' => $rightTag]);
     }
 
     /**
@@ -214,7 +214,7 @@ class Statuses extends CommonRecord
     public function getAvailableStatuses($rightIds = null)
     {
         return $this->hasMany(self::className(), ['id' => 'status_to'])
-            ->via('statusesLinksFrom', function ($q) use ($rightIds) {
+            ->via('linksFrom', function ($q) use ($rightIds) {
                 /** @var ActiveQueryInterface $q */
                 $q->andFilterWhere(['right_tag' => $rightIds]);
             });
@@ -223,7 +223,7 @@ class Statuses extends CommonRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStatusesLinksFrom()
+    public function getLinksFrom()
     {
         return $this->hasMany(StatusesLinks::className(), ['status_from' => 'id']);
     }
@@ -231,10 +231,9 @@ class Statuses extends CommonRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStatusesLinksTo()
+    public function getLinksTo()
     {
-        return $this->hasMany(StatusesLinks::className(), ['status_to' => 'id'])
-            ->from(['statusesLinksTo' => StatusesLinks::tableName()]);
+        return $this->hasMany(StatusesLinks::className(), ['status_to' => 'id']);
     }
 
     /**
