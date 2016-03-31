@@ -225,7 +225,7 @@ class Statuses extends CommonRecord
      */
     public function getStatusesLinksFrom()
     {
-        return $this->hasMany(StatusesLinks::className(), ['status_from' => 'id']);
+        return $this->hasMany(StatusesLinks::className(), ['status_from' => 'id'])->indexBy('status_to');
     }
 
     /**
@@ -234,7 +234,9 @@ class Statuses extends CommonRecord
     public function getStatusesLinksTo()
     {
         return $this->hasMany(StatusesLinks::className(), ['status_to' => 'id'])
-            ->from(['statusesLinksTo' => StatusesLinks::tableName()]);
+            ->from(['statusesLinksTo' => StatusesLinks::tableName()])
+            ->indexBy('status_from')
+        ;
     }
 
     /**
