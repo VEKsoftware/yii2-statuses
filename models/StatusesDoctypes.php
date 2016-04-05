@@ -73,6 +73,7 @@ class StatusesDoctypes extends CommonRecord
             [['name', 'symbolic_id'], 'required'],
             [['name', 'symbolic_id'], 'string', 'max' => 200],
             [['symbolic_id'], 'unique'],
+            ['symbolic_id', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.]+$/'],
         ];
     }
 
