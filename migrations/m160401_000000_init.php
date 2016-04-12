@@ -25,7 +25,7 @@ class m160401_000000_init extends Migration
         $this->createTable('statuses_links', [
             'status_from' => $this->integer()->notNull(),
             'status_to' => $this->integer()->notNull(),
-            'right_tag' => $this->string(128)->notNull()->unique(),
+            'right_tag' => $this->string(128)->notNull(),
         ], null);
 
         $this->addForeignKey('statuses_links_statuses_id_fk1', 'statuses_links', 'status_from', 'statuses', 'id', 'CASCADE', 'CASCADE');
