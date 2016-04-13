@@ -38,7 +38,7 @@ class Statuses extends Module
     {
         return [
             'access' => [
-                'class' => self::getInstance()->accessClass,
+                'class' => $this->accessClass,
             ],
         ];
     }
