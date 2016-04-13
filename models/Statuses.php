@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper;
  * @property string docTypeName
  * @property string symbolic_id
  * @property string fullName
+ * @property StatusesDoctypes docType
  */
 class Statuses extends CommonRecord
 {

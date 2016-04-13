@@ -34,7 +34,11 @@ class m160401_000000_init extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('reports_conditions');
-        $this->dropTable('reports');
+        $this->dropForeignKey('statuses_doc_type_fkey', 'statuses');
+        $this->dropForeignKey('statuses_links_statuses_id_fk1', 'statuses_links');
+        $this->dropForeignKey('statuses_links_statuses_id_fk2', 'statuses_links');
+        $this->dropTable('statuses');
+        $this->dropTable('statuses_doctypes');
+        $this->dropTable('statuses_links');
     }
 }
