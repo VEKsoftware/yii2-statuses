@@ -21,11 +21,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr/>
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
-        <div class="col-xs-5">
-            <?php echo $form->field($modelLink, 'status_to', [
+        <div class="col-xs-12">
+            <?php
+            echo $form->field($modelLink, 'status_to', [
                 'labelOptions' => ['style' => 'font-size: 150%;'],
-            ])->hiddenInput(); ?>
-            <?php echo $form->field($modelLink, 'status_from')->hiddenInput()->label(false) ?>
+            ])->hiddenInput();
+            ?>
+            <?= $form->field($modelLink, 'status_from')->hiddenInput()->label(false); ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProviderModel,
                 'filterModel' => $searchModel,
@@ -37,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => '',
                         'format' => 'raw',
                         'value' => function ($model, $key) {
+                            /** @var \statuses\models\Statuses $model */
                             return Html::radio('status_to', false, [
                                 'value' => $key,
                                 'onclick' => 'javascript:document.getElementById("statuseslinks-status_to").value = this.value;',
@@ -55,14 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ],
             ]); ?>
-        </div>
-        <div class="col-xs-5">
-            <?php echo $form->field($modelLink, 'right_tag', [
-                'labelOptions' => ['style' => 'font-size: 150%;'],
-            ])->textInput()->hint(Yii::t('statuses', 'Allowed symbols: a-Z, dot, underscore, dash')); ?>
-        </div>
-        <div class="col-xs-2">
-                <?php echo Html::submitButton(Yii::t('statuses', 'Create'), ['class' => 'btn btn-primary']); ?>
+            <?php echo Html::submitButton(Yii::t('statuses', 'Create'), ['class' => 'btn btn-primary']); ?>
         </div>
     </div>
     <?php ActiveForm::end(); ?>
