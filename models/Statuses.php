@@ -57,6 +57,7 @@ class Statuses extends CommonRecord
             [['name'], 'string', 'max' => 200],
             [['symbolic_id'], 'string'],
             [['doc_type','symbolic_id'], 'unique', 'targetAttribute' => ['doc_type','symbolic_id']],
+            [['doc_type','name'], 'unique', 'targetAttribute' => ['doc_type','name']],
             ['symbolic_id', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.]+$/'],
         ];
     }
