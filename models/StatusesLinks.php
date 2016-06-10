@@ -58,11 +58,13 @@ class StatusesLinks extends CommonRecord
                 'status_to' => $this->status_to,
                 'right_tag' => $this->right_tag,
             ])
-            ->one();
+            ->exists();
 
-        if (!is_null($link)) {
+        if( $link ) {
             $this->addError('status_from', Yii::t('statuses', 'Statuses Links is exists.'));
+            return false;
         }
+        return true;
     }
 
     /**
